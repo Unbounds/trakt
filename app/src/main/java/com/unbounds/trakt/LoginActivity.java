@@ -1,12 +1,13 @@
 package com.unbounds.trakt;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.unbounds.trakt.api.model.request.Code;
@@ -15,6 +16,10 @@ import com.unbounds.trakt.api.model.response.Token;
 import rx.functions.Action1;
 
 public class LoginActivity extends AppCompatActivity {
+
+    public static Intent createIntent(final Activity activity) {
+        return new Intent(activity, LoginActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(final View v) {
                 final WebView webView = new WebView(LoginActivity.this);
                 webView.getSettings().setJavaScriptEnabled(true);
+                webView.setWebViewClient(new WebViewClient());
                 webView.loadUrl(String.format("https://api-v2launch.trakt.tv/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s",
                         BuildConfig.CLIENT_ID,
                         "unbounds-trakt://oauth"));
