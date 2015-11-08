@@ -7,3 +7,5 @@
 /build
 /captures
 app.iml
+trakt.properties
+trakt_staging.properties
