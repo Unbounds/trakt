@@ -10,6 +10,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+import com.unbounds.trakt.BuildConfig;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -22,7 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class HttpRequest {
 
-    public static String BASE_URL;
     public static Map<String, String> HEADERS = new ConcurrentHashMap<>();
 
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
@@ -43,7 +43,7 @@ public class HttpRequest {
 
     private void initialize(final String url) {
         mBuilder.url(url.startsWith("http") ? url :
-                BASE_URL.replaceAll("/$", "") + "/" + url.replaceAll("^/", ""));
+                BuildConfig.BASE_URL.replaceAll("/$", "") + "/" + url.replaceAll("^/", ""));
         for (final Map.Entry<String, String> header : HEADERS.entrySet()) {
             header(header.getKey(), header.getValue());
         }
