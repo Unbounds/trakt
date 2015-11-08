@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
+import com.unbounds.trakt.api.HttpRequest;
 import com.unbounds.trakt.api.model.request.Code;
 import com.unbounds.trakt.api.model.response.Token;
 
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             ApiWrapper.getToken(code).subscribe(new Action1<Token>() {
                 @Override
                 public void call(final Token token) {
-                    Toast.makeText(LoginActivity.this, String.format("Token: %s", token.getAccessToken()), Toast.LENGTH_LONG).show();
+                    HttpRequest.HEADERS.put("Authorization", String.format("Bearer %s", token.getAccessToken()));
                 }
             });
         }
