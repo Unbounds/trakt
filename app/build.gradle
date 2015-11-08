@@ -10,7 +10,13 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        def properties = new Properties()
+        properties.load(new FileInputStream(rootProject.file("trakt.properties")))
+        buildConfigField("String", "CLIENT_ID", "\"${properties.client_id}\"")
+        buildConfigField("String", "CLIENT_SECRET", "\"${properties.client_secret}\"")
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -20,7 +26,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:design:23.1.0'
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'io.reactivex:rxjava:1.0.15'
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    testCompile 'junit:junit:4.12'
 }

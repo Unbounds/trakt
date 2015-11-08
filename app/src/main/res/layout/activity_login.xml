@@ -10,7 +10,10 @@
     tools:context=".ProgressActivity">
 
     <TextView
+        android:id="@+id/progress_login"
+        android:textSize="16sp"
+        android:padding="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Login" />
 </RelativeLayout>
