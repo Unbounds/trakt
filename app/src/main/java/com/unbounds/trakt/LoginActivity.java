@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -25,18 +24,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        findViewById(R.id.progress_login).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                final WebView webView = new WebView(LoginActivity.this);
-                webView.getSettings().setJavaScriptEnabled(true);
-                webView.setWebViewClient(new WebViewClient());
-                webView.loadUrl(String.format("https://api-v2launch.trakt.tv/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s",
-                        BuildConfig.CLIENT_ID,
-                        "unbounds-trakt://oauth"));
-                setContentView(webView);
-            }
-        });
+        final WebView webView = (WebView) findViewById(R.id.login_webview);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl(String.format("https://api-v2launch.trakt.tv/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s",
+                BuildConfig.CLIENT_ID,
+                "unbounds-trakt://oauth"));
     }
 
     @Override
