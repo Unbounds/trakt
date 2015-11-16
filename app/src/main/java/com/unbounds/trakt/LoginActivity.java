@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void call(final Token token) {
                     HttpRequest.HEADERS.put("Authorization", String.format("Bearer %s", token.getAccessToken()));
+                    startActivity(MainActivity.createIntent(LoginActivity.this));
                 }
             });
         }
