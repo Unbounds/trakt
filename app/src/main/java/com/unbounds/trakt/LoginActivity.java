@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.unbounds.trakt.api.HttpRequest;
 import com.unbounds.trakt.api.model.request.Code;
@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         final WebView webView = (WebView) findViewById(R.id.login_webview);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebChromeClient(new WebChromeClient());
         webView.loadUrl(String.format("%s/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s",
                 BuildConfig.BASE_URL,
                 BuildConfig.CLIENT_ID,
