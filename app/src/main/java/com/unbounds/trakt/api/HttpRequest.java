@@ -43,7 +43,7 @@ public class HttpRequest {
 
     private void initialize(final String url) {
         mBuilder.url(url.startsWith("http") ? url :
-                BuildConfig.BASE_URL.replaceAll("/$", "") + "/" + url.replaceAll("^/", ""));
+                BuildConfig.BASE_API_URL.replaceAll("/$", "") + "/" + url.replaceAll("^/", ""));
         for (final Map.Entry<String, String> header : HEADERS.entrySet()) {
             header(header.getKey(), header.getValue());
         }

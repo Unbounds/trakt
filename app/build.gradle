@@ -30,15 +30,18 @@ android {
             properties.load(new FileInputStream(rootProject.file("trakt.properties")))
             buildConfigField("String", "CLIENT_ID", "\"${properties.client_id}\"")
             buildConfigField("String", "CLIENT_SECRET", "\"${properties.client_secret}\"")
-            buildConfigField("String", "BASE_URL", "\"https://api-v2launch.trakt.tv/\"")
+            buildConfigField("String", "BASE_API_URL", "\"https://api-v2launch.trakt.tv\"")
+            buildConfigField("String", "BASE_URL", "\"https://trakt.tv\"")
         }
 
         debug {
+            applicationIdSuffix '.debug'
             def properties = new Properties()
             properties.load(new FileInputStream(rootProject.file("trakt_staging.properties")))
             buildConfigField("String", "CLIENT_ID", "\"${properties.client_id}\"")
             buildConfigField("String", "CLIENT_SECRET", "\"${properties.client_secret}\"")
-            buildConfigField("String", "BASE_URL", "\"https://private-f5ecc8-trakt.apiary-mock.com/\"")
+            buildConfigField("String", "BASE_API_URL", "\"http://api.staging.trakt.tv\"")
+            buildConfigField("String", "BASE_URL", "\"http://staging.trakt.tv\"")
         }
     }
 }

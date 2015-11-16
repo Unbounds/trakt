@@ -15,7 +15,7 @@ public class ApiWrapper {
         return new RxRequest() {
             @Override
             protected HttpRequest request() {
-                return new HttpRequest("https://api-v2launch.trakt.tv/oauth/token").post(code);
+                return new HttpRequest("%s/oauth/token", BuildConfig.BASE_URL).post(code);
             }
         }.asObservable(Token.class);
     }

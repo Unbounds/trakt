@@ -27,7 +27,8 @@ public class LoginActivity extends AppCompatActivity {
         final WebView webView = (WebView) findViewById(R.id.login_webview);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl(String.format("https://api-v2launch.trakt.tv/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s",
+        webView.loadUrl(String.format("%s/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s",
+                BuildConfig.BASE_URL,
                 BuildConfig.CLIENT_ID,
                 "unbounds-trakt://oauth"));
     }
