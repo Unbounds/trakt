@@ -9,3 +9,5 @@
 app.iml
 trakt.properties
 trakt_staging.properties
+gradle.properties
+keystore
