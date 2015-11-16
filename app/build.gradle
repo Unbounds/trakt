@@ -1,9 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('keystore')
+            storePassword "${keystore_password}"
+            keyAlias 'trakt'
+            keyPassword "${key_password}"
+        }
+    }
+
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
-
     defaultConfig {
         applicationId "com.unbounds.trakt"
         minSdkVersion 15
@@ -16,6 +24,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
 
             def properties = new Properties()
             properties.load(new FileInputStream(rootProject.file("trakt.properties")))
