@@ -31,6 +31,6 @@
                 <data android:scheme="unbounds-trakt"/>
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".progress.ProgressActivity"/>
     </application>
 </manifest>
