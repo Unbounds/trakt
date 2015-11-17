@@ -4,6 +4,9 @@ import com.unbounds.trakt.api.HttpRequest;
 import com.unbounds.trakt.api.RxRequest;
 import com.unbounds.trakt.api.model.request.Code;
 import com.unbounds.trakt.api.model.response.Token;
+import com.unbounds.trakt.api.model.response.WatchedShow;
+
+import java.util.List;
 
 import rx.Observable;
 
@@ -18,5 +21,14 @@ public class ApiWrapper {
                 return new HttpRequest("%s/oauth/token", BuildConfig.BASE_URL).post(code);
             }
         }.asObservable(Token.class);
+    }
+
+    public static Observable<WatchedShow[]> getWatchedShows() {
+        return new RxRequest() {
+            @Override
+            protected HttpRequest request() {
+                return new HttpRequest("/sync/watched/shows").get();
+            }
+        }.asObservable(WatchedShow[].class);
     }
 }
