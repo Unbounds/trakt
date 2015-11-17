@@ -20,7 +20,8 @@ public abstract class RxRequest {
         return asObservable().map(new Func1<HttpResponse, T>() {
             @Override
             public T call(final HttpResponse httpResponse) {
-                return httpResponse.getModel(ofClass);
+                if (ofClass == String.class) return (T) httpResponse.getBody();
+                else return httpResponse.getModel(ofClass);
             }
         });
     }

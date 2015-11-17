@@ -112,6 +112,11 @@ public class HttpRequest {
                 }
 
                 @Override
+                public String getBody() {
+                    return body;
+                }
+
+                @Override
                 public String getHeader(final String name) {
                     return headers.get(name);
                 }
