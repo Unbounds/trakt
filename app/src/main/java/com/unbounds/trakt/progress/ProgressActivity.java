@@ -17,6 +17,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 public class ProgressActivity extends AppCompatActivity {
 
@@ -44,7 +45,13 @@ public class ProgressActivity extends AppCompatActivity {
                 adapter.clear();
                 final List<Observable<WatchedProgress>> observables = new ArrayList<>(watchedShows.length);
                 for (final WatchedShow watchedShow : watchedShows) {
-                    observables.add(ApiWrapper.getWatchedProgress(watchedShow.getShow().getIds().getTrakt()));
+                    observables.add(ApiWrapper.getWatchedProgress(watchedShow.getShow().getIds().getTrakt()).map(new Func1<WatchedProgress, WatchedProgress>() {
+                        @Override
+                        public WatchedProgress call(final WatchedProgress watchedProgress) {
+                            watchedProgress.setShow(watchedShow.getShow());
+                            return watchedProgress;
+                        }
+                    }));
                 }
                 Observable.merge(observables).subscribe(new Action1<WatchedProgress>() {
                     @Override

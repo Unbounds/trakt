@@ -28,7 +28,8 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final WatchedProgress watchedProgress = mWatchedProgresses.get(position);
-        holder.mTextView.setText(watchedProgress.getNextEpisode().getTitle());
+        holder.mShowTitle.setText(watchedProgress.getShow().getTitle());
+        holder.mEpisodeTitle.setText(watchedProgress.getNextEpisode().getTitle());
     }
 
     @Override
@@ -48,11 +49,13 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mTextView;
+        public final TextView mShowTitle;
+        public final TextView mEpisodeTitle;
 
         public ViewHolder(final View view) {
             super(view);
-            mTextView = (TextView) view.findViewById(R.id.progress_item_title);
+            mShowTitle = (TextView) view.findViewById(R.id.progress_item_show_title);
+            mEpisodeTitle = (TextView) view.findViewById(R.id.progress_item_episode_title);
         }
     }
 }
