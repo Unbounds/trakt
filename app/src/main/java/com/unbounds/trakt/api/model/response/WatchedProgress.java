@@ -46,4 +46,8 @@ public final class WatchedProgress {
     public Episode getNextEpisode() {
         return nextEpisode;
     }
+
+    public boolean isCompleted() {
+        return aired == completed;
+    }
 }
