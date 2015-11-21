@@ -21,8 +21,7 @@
 
             <TextView
                 android:id="@+id/progress_item_show_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Text.Title"
                 tools:text="Show name"/>
 
             <TextView
