@@ -45,11 +45,11 @@
                 android:id="@+id/progress_item_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/progress_item_show_poster"
                 android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/progress_item_show_poster"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/gap_8"
-                android:paddingBottom="@dimen/gap_16"
-                android:paddingTop="@dimen/gap_16"
                 android:src="@drawable/ic_check_black_48dp"
                 app:tint="@color/check_tint"/>
 
