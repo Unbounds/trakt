@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unbounds.trakt.R;
 import com.unbounds.trakt.api.model.response.WatchedProgress;
@@ -22,7 +23,12 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public Adapter.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.progress_item, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, new ViewHolder.OnWatched() {
+            @Override
+            public void onWatched(final int position) {
+                Toast.makeText(parent.getContext(), "" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -30,6 +36,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         final WatchedProgress watchedProgress = mWatchedProgresses.get(position);
         holder.mShowTitle.setText(watchedProgress.getShow().getTitle());
         holder.mEpisodeTitle.setText(watchedProgress.getNextEpisode().getTitle());
+        holder.position = position;
     }
 
     @Override
@@ -49,13 +56,24 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mShowTitle;
-        public final TextView mEpisodeTitle;
+        public interface OnWatched {
+            void onWatched(final int position);
+        }
 
-        public ViewHolder(final View view) {
+        private final TextView mShowTitle;
+        private final TextView mEpisodeTitle;
+        private int position;
+
+        public ViewHolder(final View view, final OnWatched listener) {
             super(view);
             mShowTitle = (TextView) view.findViewById(R.id.progress_item_show_title);
             mEpisodeTitle = (TextView) view.findViewById(R.id.progress_item_episode_title);
+            view.findViewById(R.id.progress_item_check).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    listener.onWatched(position);
+                }
+            });
         }
     }
 }
