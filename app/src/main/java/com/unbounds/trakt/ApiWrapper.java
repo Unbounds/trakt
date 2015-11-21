@@ -26,7 +26,7 @@ public class ApiWrapper {
         return new RxRequest() {
             @Override
             protected HttpRequest request() {
-                return new HttpRequest("/sync/watched/shows").get();
+                return new HttpRequest("/sync/watched/shows?extended=images").get();
             }
         }.asObservable(WatchedShow[].class);
     }

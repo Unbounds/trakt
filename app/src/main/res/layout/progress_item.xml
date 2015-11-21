@@ -19,9 +19,17 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/gap_8">
 
+            <ImageView
+                android:id="@+id/progress_item_show_poster"
+                android:layout_width="60dp"
+                android:layout_height="90dp"
+                android:layout_marginRight="@dimen/gap_16"
+                tools:background="@color/neon_green"/>
+
             <TextView
                 android:id="@+id/progress_item_show_title"
                 style="@style/Text.Title"
+                android:layout_toRightOf="@id/progress_item_show_poster"
                 tools:text="Show name"/>
 
             <TextView
@@ -30,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/progress_item_show_title"
                 android:layout_marginTop="@dimen/gap_8"
+                android:layout_toRightOf="@id/progress_item_show_poster"
                 tools:text="Episode name"/>
 
             <com.unbounds.trakt.widget.TintImageView
@@ -37,15 +46,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/gap_8"
+                android:paddingBottom="@dimen/gap_16"
+                android:paddingTop="@dimen/gap_16"
                 android:src="@drawable/ic_check_black_48dp"
                 app:tint="@color/check_tint"/>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/progress_item_check"
-                android:layout_alignTop="@id/progress_item_check"
+                android:layout_alignBottom="@id/progress_item_show_poster"
+                android:layout_alignTop="@id/progress_item_show_poster"
                 android:layout_toLeftOf="@id/progress_item_check"
                 android:background="@color/angel_gray"/>
         </RelativeLayout>

@@ -37,7 +37,7 @@ public class ProgressActivity extends AppCompatActivity {
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        final Adapter adapter = new Adapter();
+        final Adapter adapter = new Adapter(this);
         recyclerView.setAdapter(adapter);
         ApiWrapper.getWatchedShows().subscribe(new Action1<WatchedShow[]>() {
             @Override
