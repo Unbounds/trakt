@@ -33,7 +33,6 @@ public class ProgressActivity extends AppCompatActivity {
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.progress_recycle_view);
         recyclerView.setHasFixedSize(true);
 
-        // use a linear layout manager
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -52,7 +51,8 @@ public class ProgressActivity extends AppCompatActivity {
                         }
                     }));
                 }
-                Observable.merge(observables).subscribe(new Action1<WatchedProgressWrapper>() {
+
+                Observable.concatEager(observables).subscribe(new Action1<WatchedProgressWrapper>() {
                     @Override
                     public void call(final WatchedProgressWrapper watchedProgressWrapper) {
                         if (!watchedProgressWrapper.getWatchedProgress().isCompleted()) {
