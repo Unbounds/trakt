@@ -64,6 +64,16 @@
                 android:layout_toLeftOf="@id/progress_item_divider"
                 android:layout_toRightOf="@id/progress_item_show_poster"
                 tools:text="Episode name"/>
+
+            <TextView
+                android:id="@+id/progress_item_episode_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/progress_item_episode_title"
+                android:layout_marginTop="@dimen/gap_8"
+                android:layout_toLeftOf="@id/progress_item_divider"
+                android:layout_toRightOf="@id/progress_item_show_poster"
+                tools:text="S01E01"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

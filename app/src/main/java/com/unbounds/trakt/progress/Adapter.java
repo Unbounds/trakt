@@ -18,9 +18,7 @@ import com.unbounds.trakt.api.model.response.AddHistory;
 import com.unbounds.trakt.api.model.response.WatchedProgress;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import rx.functions.Action1;
 
@@ -77,6 +75,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         holder.mShowTitle.setText(show.getTitle());
         holder.mEpisodeTitle.setText(watchedProgress.getNextEpisode().getTitle());
+        holder.mEpisodeNumber.setText(String.format("S%02dE%02d", watchedProgress.getNextEpisode().getSeason(), watchedProgress.getNextEpisode().getNumber()));
         Picasso.with(mContext).load(show.getImages().getPoster().getThumb()).into(holder.mShowPoster);
         holder.mCheck.setSelected(selected);
         holder.position = position;
@@ -105,6 +104,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         private final TextView mShowTitle;
         private final TextView mEpisodeTitle;
+        private final TextView mEpisodeNumber;
         private final ImageView mShowPoster;
         private final View mCheck;
         private int position;
@@ -114,6 +114,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             mShowPoster = (ImageView) view.findViewById(R.id.progress_item_show_poster);
             mShowTitle = (TextView) view.findViewById(R.id.progress_item_show_title);
             mEpisodeTitle = (TextView) view.findViewById(R.id.progress_item_episode_title);
+            mEpisodeNumber = (TextView) view.findViewById(R.id.progress_item_episode_number);
             mCheck = view.findViewById(R.id.progress_item_check);
             mCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
