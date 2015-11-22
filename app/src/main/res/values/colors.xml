@@ -5,10 +5,12 @@
     <color name="colorAccent">@color/neon_green</color>
 
     <color name="cocaine_white">#FFFFFFFF</color>
+    <color name="flat_gray">#FFDDDDDD</color>
     <color name="cool_gray">#FF8C92AC</color>
     <color name="dolphin_gray">#FF6E7285</color>
+    <color name="space_gray">#FF423F43</color>
+    <color name="moonlight_blue">#FF4F6582</color>
     <color name="neon_green">#FFCBE86B</color>
-    <color name="angel_gray">#FFEEF2E4</color>
     <color name="almost_black">#FF1C140D</color>
     <color name="boogie_green">#FFCBE86B</color>
 </resources>
