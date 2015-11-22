@@ -21,6 +21,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
+            android:configChanges="orientation|screenSize"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -31,6 +32,8 @@
                 <data android:scheme="@string/oauth_referrer_scheme"/>
             </intent-filter>
         </activity>
-        <activity android:name=".progress.ProgressActivity"/>
+        <activity
+            android:name=".progress.ProgressActivity"
+            android:configChanges="orientation|screenSize"/>
     </application>
 </manifest>
