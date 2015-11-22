@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 import com.unbounds.trakt.ApiWrapper;
 import com.unbounds.trakt.R;
 import com.unbounds.trakt.api.model.Episode;
+import com.unbounds.trakt.api.model.Show;
 import com.unbounds.trakt.api.model.request.WatchedItems;
 import com.unbounds.trakt.api.model.response.AddHistory;
 import com.unbounds.trakt.api.model.response.WatchedProgress;
@@ -27,8 +28,7 @@ import rx.functions.Action1;
  * Created by maclir on 2015-11-17.
  */
 class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    private final List<WatchedProgress> mWatchedProgresses = new ArrayList<>();
-    private final Set<Integer> mSelectedPositions = new HashSet<>();
+    private final List<WatchedProgressWrapper> mData = new ArrayList<>();
     private final Context mContext;
 
     Adapter(final Context context) {
@@ -42,23 +42,22 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return new ViewHolder(view, new ViewHolder.OnClicked() {
             @Override
             public void onCheckClicked(final int position) {
-                mSelectedPositions.add(position);
-                final WatchedProgress watchedProgress = mWatchedProgresses.get(position);
-                final Episode episode = watchedProgress.getNextEpisode();
+                final WatchedProgressWrapper watchedProgressWrapper = mData.get(position);
+                watchedProgressWrapper.setSelected(true);
+                final Episode episode = watchedProgressWrapper.getWatchedProgress().getNextEpisode();
                 ApiWrapper.postWatchedItems(new WatchedItems.Builder().addEpisode(episode).create()).subscribe(new Action1<AddHistory>() {
                     @Override
                     public void call(final AddHistory addHistory) {
                         //TODO check if added episode exists in not_added
-                        ApiWrapper.getWatchedProgress(watchedProgress.getShow().getIds().getTrakt()).subscribe(new Action1<WatchedProgress>() {
+                        ApiWrapper.getWatchedProgress(watchedProgressWrapper.getShow().getIds().getTrakt()).subscribe(new Action1<WatchedProgress>() {
                             @Override
-                            public void call(final WatchedProgress newWatchedProgress) {
-                                mSelectedPositions.remove(position);
-                                if (newWatchedProgress.isCompleted()) {
-                                    mWatchedProgresses.remove(position);
+                            public void call(final WatchedProgress watchedProgress) {
+                                watchedProgressWrapper.setSelected(false);
+                                if (watchedProgress.isCompleted()) {
+                                    mData.remove(position);
                                     notifyItemRemoved(position);
                                 } else {
-                                    newWatchedProgress.setShow(watchedProgress.getShow());
-                                    mWatchedProgresses.set(position, newWatchedProgress);
+                                    mData.set(position, watchedProgressWrapper.setWatchedProgress(watchedProgress));
                                     notifyItemChanged(position);
                                 }
                             }
@@ -71,27 +70,31 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final WatchedProgress watchedProgress = mWatchedProgresses.get(position);
-        holder.mShowTitle.setText(watchedProgress.getShow().getTitle());
+        final WatchedProgressWrapper watchedProgressWrapper = mData.get(position);
+        final WatchedProgress watchedProgress = watchedProgressWrapper.getWatchedProgress();
+        final Show show = watchedProgressWrapper.getShow();
+        final boolean selected = watchedProgressWrapper.isSelected();
+
+        holder.mShowTitle.setText(show.getTitle());
         holder.mEpisodeTitle.setText(watchedProgress.getNextEpisode().getTitle());
-        Picasso.with(mContext).load(watchedProgress.getShow().getImages().getPoster().getThumb()).into(holder.mShowPoster);
-        holder.mCheck.setSelected(mSelectedPositions.contains(position));
+        Picasso.with(mContext).load(show.getImages().getPoster().getThumb()).into(holder.mShowPoster);
+        holder.mCheck.setSelected(selected);
         holder.position = position;
     }
 
     @Override
     public int getItemCount() {
-        return mWatchedProgresses.size();
+        return mData.size();
     }
 
-    public void add(final WatchedProgress watchedProgress) {
-        final int position = mWatchedProgresses.size();
-        mWatchedProgresses.add(watchedProgress);
+    public void add(final WatchedProgressWrapper watchedProgressWrapper) {
+        final int position = mData.size();
+        mData.add(watchedProgressWrapper);
         notifyItemInserted(position);
     }
 
     public void clear() {
-        mWatchedProgresses.clear();
+        mData.clear();
         notifyDataSetChanged();
     }
 

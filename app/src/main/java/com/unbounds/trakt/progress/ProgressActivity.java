@@ -43,21 +43,20 @@ public class ProgressActivity extends AppCompatActivity {
             @Override
             public void call(final WatchedShow[] watchedShows) {
                 adapter.clear();
-                final List<Observable<WatchedProgress>> observables = new ArrayList<>(watchedShows.length);
+                final List<Observable<WatchedProgressWrapper>> observables = new ArrayList<>(watchedShows.length);
                 for (final WatchedShow watchedShow : watchedShows) {
-                    observables.add(ApiWrapper.getWatchedProgress(watchedShow.getShow().getIds().getTrakt()).map(new Func1<WatchedProgress, WatchedProgress>() {
+                    observables.add(ApiWrapper.getWatchedProgress(watchedShow.getShow().getIds().getTrakt()).map(new Func1<WatchedProgress, WatchedProgressWrapper>() {
                         @Override
-                        public WatchedProgress call(final WatchedProgress watchedProgress) {
-                            watchedProgress.setShow(watchedShow.getShow());
-                            return watchedProgress;
+                        public WatchedProgressWrapper call(final WatchedProgress watchedProgress) {
+                            return new WatchedProgressWrapper(watchedProgress, watchedShow.getShow());
                         }
                     }));
                 }
-                Observable.merge(observables).subscribe(new Action1<WatchedProgress>() {
+                Observable.merge(observables).subscribe(new Action1<WatchedProgressWrapper>() {
                     @Override
-                    public void call(final WatchedProgress watchedProgress) {
-                        if (!watchedProgress.isCompleted()) {
-                            adapter.add(watchedProgress);
+                    public void call(final WatchedProgressWrapper watchedProgressWrapper) {
+                        if (!watchedProgressWrapper.getWatchedProgress().isCompleted()) {
+                            adapter.add(watchedProgressWrapper);
                         }
                     }
                 });
