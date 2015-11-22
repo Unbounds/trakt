@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
-                if (url.startsWith("unbounds-trakt")) {
+                if (url.startsWith(getString(R.string.oauth_referrer))) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                     return true;
                 }
@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         webView.loadUrl(String.format("%s/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s",
                 BuildConfig.BASE_URL,
                 BuildConfig.CLIENT_ID,
-                "unbounds-trakt://oauth"));
+                getString(R.string.oauth_referrer)));
     }
 
     @Override
@@ -52,9 +52,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void parseResponse(final Uri uri) {
-        if (uri != null && uri.toString().startsWith("unbounds-trakt")) {
+        if (uri != null && uri.toString().startsWith(getString(R.string.oauth_referrer))) {
             final String authCode = uri.getQueryParameter("code");
-            final Code code = new Code(authCode);
+            final Code code = new Code(authCode, getString(R.string.oauth_referrer));
             ApiWrapper.getToken(code).subscribe(new Action1<Token>() {
                 @Override
                 public void call(final Token token) {

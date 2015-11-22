@@ -28,7 +28,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data android:scheme="unbounds-trakt"/>
+                <data android:scheme="@string/oauth_referrer_scheme"/>
             </intent-filter>
         </activity>
         <activity android:name=".progress.ProgressActivity"/>

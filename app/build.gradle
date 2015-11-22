@@ -32,6 +32,9 @@ android {
             buildConfigField("String", "CLIENT_SECRET", "\"${properties.client_secret}\"")
             buildConfigField("String", "BASE_API_URL", "\"https://api-v2launch.trakt.tv\"")
             buildConfigField("String", "BASE_URL", "\"https://trakt.tv\"")
+
+            resValue "string", "oauth_referrer_scheme", '"unbounds-trakt"'
+            resValue "string", "oauth_referrer", '"unbounds-trakt://oauth"'
         }
 
         debug {
@@ -42,6 +45,9 @@ android {
             buildConfigField("String", "CLIENT_SECRET", "\"${properties.client_secret}\"")
             buildConfigField("String", "BASE_API_URL", "\"http://api.staging.trakt.tv\"")
             buildConfigField("String", "BASE_URL", "\"http://staging.trakt.tv\"")
+
+            resValue "string", "oauth_referrer_scheme", '"unbounds-trakt-debug"'
+            resValue "string", "oauth_referrer", '"unbounds-trakt-debug://oauth"'
         }
     }
 }

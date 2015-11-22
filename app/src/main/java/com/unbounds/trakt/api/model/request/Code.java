@@ -12,11 +12,11 @@ public class Code {
     private final String redirectUri;
     private final String grantType;
 
-    public Code(String code) {
+    public Code(final String code, final String redirectUri) {
         this.code = code;
-        this.clientId = BuildConfig.CLIENT_ID;
-        this.clientSecret = BuildConfig.CLIENT_SECRET;
-        this.redirectUri = "unbounds-trakt://oauth";
-        this.grantType = "authorization_code";
+        this.redirectUri = redirectUri;
+        clientId = BuildConfig.CLIENT_ID;
+        clientSecret = BuildConfig.CLIENT_SECRET;
+        grantType = "authorization_code";
     }
 }
