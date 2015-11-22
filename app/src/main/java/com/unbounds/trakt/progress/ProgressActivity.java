@@ -3,6 +3,7 @@ package com.unbounds.trakt.progress;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -38,7 +40,15 @@ public class ProgressActivity extends AppCompatActivity {
 
         final Adapter adapter = new Adapter(this);
         recyclerView.setAdapter(adapter);
-        ApiWrapper.getWatchedShows().subscribe(new Action1<WatchedShow[]>() {
+
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.progress_swipe_refresh_layout);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.moonlight_blue,
+                R.color.boogie_green,
+                R.color.space_gray,
+                R.color.cool_gray
+        );
+        final Action1<WatchedShow[]> loadShowsAction = new Action1<WatchedShow[]>() {
             @Override
             public void call(final WatchedShow[] watchedShows) {
                 adapter.clear();
@@ -52,7 +62,12 @@ public class ProgressActivity extends AppCompatActivity {
                     }));
                 }
 
-                Observable.concatEager(observables).subscribe(new Action1<WatchedProgressWrapper>() {
+                Observable.concatEager(observables).doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }).subscribe(new Action1<WatchedProgressWrapper>() {
                     @Override
                     public void call(final WatchedProgressWrapper watchedProgressWrapper) {
                         if (!watchedProgressWrapper.getWatchedProgress().isCompleted()) {
@@ -61,6 +76,14 @@ public class ProgressActivity extends AppCompatActivity {
                     }
                 });
             }
+        };
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ApiWrapper.getWatchedShows().subscribe(loadShowsAction);
+            }
         });
+        ApiWrapper.getWatchedShows().subscribe(loadShowsAction);
     }
 }
