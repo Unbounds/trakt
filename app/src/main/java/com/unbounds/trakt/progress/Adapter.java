@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -78,6 +79,9 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 watchedProgress.getNextEpisode().getSeason(),
                 watchedProgress.getNextEpisode().getNumber(),
                 watchedProgress.getNextEpisode().getTitle()));
+        final int percentage = (int) ((double) watchedProgress.getCompleted() * 100 / watchedProgress.getAired());
+        holder.mProgressText.setText(String.format("%d/%d (%d%%)", watchedProgress.getCompleted(), watchedProgress.getAired(), percentage));
+        holder.mProgressBar.setProgress(percentage);
         Picasso.with(mContext).load(show.getImages().getPoster().getThumb()).into(holder.mShowPoster);
         holder.mCheck.setSelected(selected);
         holder.position = position;
@@ -107,6 +111,8 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         private final TextView mShowTitle;
         private final TextView mEpisodeTitle;
         private final ImageView mShowPoster;
+        private final TextView mProgressText;
+        private final ProgressBar mProgressBar;
         private final View mCheck;
         private int position;
 
@@ -115,6 +121,8 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             mShowPoster = (ImageView) view.findViewById(R.id.progress_item_show_poster);
             mShowTitle = (TextView) view.findViewById(R.id.progress_item_show_title);
             mEpisodeTitle = (TextView) view.findViewById(R.id.progress_item_episode_title);
+            mProgressBar = (ProgressBar) view.findViewById(R.id.progress_item_progress_bar);
+            mProgressText = (TextView) view.findViewById(R.id.progress_item_progress_text);
             mCheck = view.findViewById(R.id.progress_item_check);
             mCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
