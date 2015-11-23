@@ -21,13 +21,14 @@ android {
     }
 
     buildTypes {
+        def properties = new Properties()
+        properties.load(new FileInputStream(rootProject.file("trakt.properties")))
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
-            def properties = new Properties()
-            properties.load(new FileInputStream(rootProject.file("trakt.properties")))
             buildConfigField("String", "CLIENT_ID", "\"${properties.client_id}\"")
             buildConfigField("String", "CLIENT_SECRET", "\"${properties.client_secret}\"")
             buildConfigField("String", "BASE_API_URL", "\"https://api-v2launch.trakt.tv\"")
@@ -39,10 +40,8 @@ android {
 
         debug {
             applicationIdSuffix '.debug'
-            def properties = new Properties()
-            properties.load(new FileInputStream(rootProject.file("trakt_staging.properties")))
-            buildConfigField("String", "CLIENT_ID", "\"${properties.client_id}\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"${properties.client_secret}\"")
+            buildConfigField("String", "CLIENT_ID", "\"${properties.staging_client_id}\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"${properties.staging_client_secret}\"")
             buildConfigField("String", "BASE_API_URL", "\"http://api.staging.trakt.tv\"")
             buildConfigField("String", "BASE_URL", "\"http://staging.trakt.tv\"")
 
