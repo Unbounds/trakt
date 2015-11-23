@@ -3,10 +3,12 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         release {
-            storeFile file('keystore')
-            storePassword "${keystore_password}"
-            keyAlias 'trakt'
-            keyPassword "${key_password}"
+            if (project.hasProperty("keystore_password") && project.hasProperty("key_password")) {
+                storeFile file('keystore')
+                storePassword "${keystore_password}"
+                keyAlias 'trakt'
+                keyPassword "${key_password}"
+            }
         }
     }
 
