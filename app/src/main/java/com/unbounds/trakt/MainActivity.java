@@ -15,6 +15,8 @@ import com.unbounds.trakt.progress.ProgressFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int LOGIN_REQUEST = 1;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +50,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_login) {
-            startActivity(LoginActivity.createIntent(MainActivity.this));
+            startActivityForResult(LoginActivity.createIntent(MainActivity.this), LOGIN_REQUEST);
         }
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if (requestCode == LOGIN_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                this.getFragmentManager().beginTransaction().replace(R.id.fragment_content, new ProgressFragment()).commit();
+            }
+        }
     }
 }
