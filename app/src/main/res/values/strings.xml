@@ -3,6 +3,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="login">Login</string>
+    <string name="trending_shows">Trending</string>
+    <string name="popular_shows">Popular</string>
+    <string name="search">search</string>
 
     <!-- Progress fragment -->
     <string name="progress_loading">Loading…</string>

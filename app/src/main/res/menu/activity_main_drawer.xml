@@ -4,7 +4,13 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_login"
-            android:title="@string/login" />
+            android:title="@string/login"/>
+        <item
+            android:id="@+id/nav_trending"
+            android:title="@string/trending_shows"/>
+        <item
+            android:id="@+id/nav_popular"
+            android:title="@string/popular_shows"/>
     </group>
 
 </menu>
