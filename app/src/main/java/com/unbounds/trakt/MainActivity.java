@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(final MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        final int id = item.getItemId();
 
         if (id == R.id.nav_login) {
             startActivityForResult(LoginActivity.createIntent(MainActivity.this), LOGIN_REQUEST);

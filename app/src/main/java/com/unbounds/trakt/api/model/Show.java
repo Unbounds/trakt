@@ -9,7 +9,7 @@ public class Show {
     private final Images images;
     private final Ids ids;
 
-    public Show(String title, long year, final Images images, Ids ids) {
+    public Show(final String title, final long year, final Images images, final Ids ids) {
         this.title = title;
         this.year = year;
         this.images = images;
@@ -178,7 +178,7 @@ public class Show {
         private final long tmdb;
         private final long tvrage;
 
-        public Ids(long trakt, String slug, long tvdb, String imdb, long tmdb, long tvrage) {
+        public Ids(final long trakt, final String slug, final long tvdb, final String imdb, final long tmdb, final long tvrage) {
             this.trakt = trakt;
             this.slug = slug;
             this.tvdb = tvdb;

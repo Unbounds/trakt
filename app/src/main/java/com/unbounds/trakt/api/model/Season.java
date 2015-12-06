@@ -7,7 +7,7 @@ public class Season {
     private final long number;
     private final Ids ids;
 
-    public Season(long number, Ids ids) {
+    public Season(final long number, final Ids ids) {
         this.number = number;
         this.ids = ids;
     }
@@ -26,7 +26,7 @@ public class Season {
         private final long tmdb;
         private final Ids.Tvrage tvrage;
 
-        public Ids(long trakt, long tvdb, long tmdb, Ids.Tvrage tvrage) {
+        public Ids(final long trakt, final long tvdb, final long tmdb, final Ids.Tvrage tvrage) {
             this.trakt = trakt;
             this.tvdb = tvdb;
             this.tmdb = tmdb;
