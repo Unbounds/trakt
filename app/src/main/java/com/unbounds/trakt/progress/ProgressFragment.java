@@ -1,12 +1,13 @@
 package com.unbounds.trakt.progress;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.unbounds.trakt.ApiWrapper;
 import com.unbounds.trakt.R;
@@ -21,27 +22,21 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-public class ProgressActivity extends AppCompatActivity {
-
-    public static Intent createIntent(final Activity activity) {
-        return new Intent(activity, ProgressActivity.class);
-    }
+public class ProgressFragment extends Fragment {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_progress);
-
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.progress_recycle_view);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.activity_progress, container, false);
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.progress_recycle_view);
         recyclerView.setHasFixedSize(true);
 
-        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        final Adapter adapter = new Adapter(this);
+        final Adapter adapter = new Adapter(getActivity());
         recyclerView.setAdapter(adapter);
 
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.progress_swipe_refresh_layout);
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.progress_swipe_refresh_layout);
         swipeRefreshLayout.setColorSchemeResources(
                 R.color.moonlight_blue,
                 R.color.boogie_green,
@@ -85,5 +80,7 @@ public class ProgressActivity extends AppCompatActivity {
             }
         });
         ApiWrapper.getWatchedShows().subscribe(loadShowsAction);
+
+        return view;
     }
 }

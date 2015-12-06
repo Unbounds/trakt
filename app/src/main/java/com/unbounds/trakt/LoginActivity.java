@@ -12,7 +12,6 @@ import android.webkit.WebViewClient;
 import com.unbounds.trakt.api.HttpRequest;
 import com.unbounds.trakt.api.model.request.Code;
 import com.unbounds.trakt.api.model.response.Token;
-import com.unbounds.trakt.progress.ProgressActivity;
 
 import rx.functions.Action1;
 
@@ -59,7 +58,8 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void call(final Token token) {
                     HttpRequest.HEADERS.put("Authorization", String.format("Bearer %s", token.getAccessToken()));
-                    startActivity(ProgressActivity.createIntent(LoginActivity.this));
+                    setResult(RESULT_OK);
+                    finish();
                 }
             });
         }
