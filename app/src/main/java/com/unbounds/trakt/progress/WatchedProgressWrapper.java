@@ -6,21 +6,21 @@ import com.unbounds.trakt.api.model.response.WatchedProgress;
 /**
  * Created by maclir on 2015-11-22.
  */
-public class WatchedProgressWrapper {
+class WatchedProgressWrapper {
     private final Show mShow;
     private WatchedProgress mWatchedProgress;
     private boolean selected;
 
-    public WatchedProgressWrapper(final WatchedProgress watchedProgress, final Show show) {
+    WatchedProgressWrapper(final WatchedProgress watchedProgress, final Show show) {
         mWatchedProgress = watchedProgress;
         mShow = show;
     }
 
-    public Show getShow() {
+    Show getShow() {
         return mShow;
     }
 
-    public WatchedProgress getWatchedProgress() {
+    WatchedProgress getWatchedProgress() {
         return mWatchedProgress;
     }
 
