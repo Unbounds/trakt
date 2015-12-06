@@ -61,7 +61,7 @@ public class ProgressFragment extends Fragment {
                 }
                 adapter.setWatchedProgressWrappers(watchedProgressWrappers);
 
-                Observable.concatEager(observables).doOnCompleted(new Action0() {
+                Observable.merge(observables).doOnCompleted(new Action0() {
                     @Override
                     public void call() {
                         swipeRefreshLayout.setRefreshing(false);
