@@ -74,17 +74,28 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         final Show show = watchedProgressWrapper.getShow();
         final boolean selected = watchedProgressWrapper.isSelected();
 
+        holder.mLoaded = watchedProgress != null && !watchedProgress.isCompleted();
         holder.mShowTitle.setText(show.getTitle());
-        holder.mEpisodeTitle.setText(String.format("S%02dE%02d: %s",
-                watchedProgress.getNextEpisode().getSeason(),
-                watchedProgress.getNextEpisode().getNumber(),
-                watchedProgress.getNextEpisode().getTitle()));
-        final int percentage = (int) ((double) watchedProgress.getCompleted() * 100 / watchedProgress.getAired());
-        holder.mProgressText.setText(String.format("%d/%d (%d%%)", watchedProgress.getCompleted(), watchedProgress.getAired(), percentage));
-        holder.mProgressBar.setProgress(percentage);
         Picasso.with(mContext).load(show.getImages().getPoster().getThumb()).into(holder.mShowPoster);
-        holder.mCheck.setSelected(selected);
-        holder.position = position;
+
+        if (holder.mLoaded) {
+            holder.mEpisodeTitle.setText(String.format("S%02dE%02d: %s",
+                    watchedProgress.getNextEpisode().getSeason(),
+                    watchedProgress.getNextEpisode().getNumber(),
+                    watchedProgress.getNextEpisode().getTitle()));
+            final int percentage = (int) ((double) watchedProgress.getCompleted() * 100 / watchedProgress.getAired());
+            holder.mProgressText.setText(String.format("%d/%d (%d%%)", watchedProgress.getCompleted(), watchedProgress.getAired(), percentage));
+            holder.mProgressBar.setProgress(percentage);
+            holder.mCheck.setEnabled(true);
+            holder.mCheck.setSelected(selected);
+            holder.position = position;
+        } else {
+            holder.mEpisodeTitle.setText(mContext.getText(R.string.progress_loading));
+            holder.mProgressText.setText("");
+            holder.mProgressBar.setProgress(0);
+            holder.mCheck.setEnabled(false);
+            holder.mCheck.setSelected(selected);
+        }
     }
 
     @Override
@@ -92,10 +103,31 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return mData.size();
     }
 
+    public void setWatchedProgressWrappers(final List<WatchedProgressWrapper> watchedProgressWrappers) {
+        mData.clear();
+        mData.addAll(watchedProgressWrappers);
+        notifyDataSetChanged();
+    }
+
     public void add(final WatchedProgressWrapper watchedProgressWrapper) {
         final int position = mData.size();
         mData.add(watchedProgressWrapper);
         notifyItemInserted(position);
+    }
+
+    public void notifyWatchedProgressWrapperChanged(final WatchedProgressWrapper watchedProgressWrapper) {
+        final int position = mData.indexOf(watchedProgressWrapper);
+        if (position != -1) {
+            notifyItemChanged(position);
+        }
+    }
+
+    public void remove(final WatchedProgressWrapper watchedProgressWrapper) {
+        final int position = mData.indexOf(watchedProgressWrapper);
+        if (position != -1) {
+            mData.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     public void clear() {
@@ -115,6 +147,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         private final ProgressBar mProgressBar;
         private final View mCheck;
         private int position;
+        private boolean mLoaded;
 
         public ViewHolder(final View view, final OnClicked listener) {
             super(view);
@@ -127,7 +160,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             mCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {
-                    if (mCheck.isSelected()) return;
+                    if (mCheck.isSelected() || !mLoaded) return;
                     mCheck.setSelected(true);
                     listener.onCheckClicked(position);
                 }

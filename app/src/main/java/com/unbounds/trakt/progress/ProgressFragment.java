@@ -48,14 +48,18 @@ public class ProgressFragment extends Fragment {
             public void call(final WatchedShow[] watchedShows) {
                 adapter.clear();
                 final List<Observable<WatchedProgressWrapper>> observables = new ArrayList<>(watchedShows.length);
+                final List<WatchedProgressWrapper> watchedProgressWrappers = new ArrayList<>();
                 for (final WatchedShow watchedShow : watchedShows) {
+                    final WatchedProgressWrapper watchedProgressWrapper = new WatchedProgressWrapper(watchedShow.getShow());
+                    watchedProgressWrappers.add(watchedProgressWrapper);
                     observables.add(ApiWrapper.getWatchedProgress(watchedShow.getShow().getIds().getTrakt()).map(new Func1<WatchedProgress, WatchedProgressWrapper>() {
                         @Override
                         public WatchedProgressWrapper call(final WatchedProgress watchedProgress) {
-                            return new WatchedProgressWrapper(watchedProgress, watchedShow.getShow());
+                            return watchedProgressWrapper.setWatchedProgress(watchedProgress);
                         }
                     }));
                 }
+                adapter.setWatchedProgressWrappers(watchedProgressWrappers);
 
                 Observable.concatEager(observables).doOnCompleted(new Action0() {
                     @Override
@@ -66,7 +70,9 @@ public class ProgressFragment extends Fragment {
                     @Override
                     public void call(final WatchedProgressWrapper watchedProgressWrapper) {
                         if (!watchedProgressWrapper.getWatchedProgress().isCompleted()) {
-                            adapter.add(watchedProgressWrapper);
+                            adapter.notifyWatchedProgressWrapperChanged(watchedProgressWrapper);
+                        } else {
+                            adapter.remove(watchedProgressWrapper);
                         }
                     }
                 });

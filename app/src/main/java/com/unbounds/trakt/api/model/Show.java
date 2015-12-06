@@ -32,6 +32,22 @@ public class Show {
         return ids;
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Show)) return false;
+
+        final Show show = (Show) o;
+
+        return !(ids != null ? !ids.equals(show.ids) : show.ids != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return ids != null ? ids.hashCode() : 0;
+    }
+
     public static class Images {
         private final Banner banner;
         private final Poster poster;
@@ -209,6 +225,25 @@ public class Show {
 
         public long getTvrage() {
             return tvrage;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Ids)) return false;
+
+            final Ids ids = (Ids) o;
+
+            if (trakt != ids.trakt) return false;
+            return !(slug != null ? !slug.equals(ids.slug) : ids.slug != null);
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = (int) (trakt ^ (trakt >>> 32));
+            result = 31 * result + (slug != null ? slug.hashCode() : 0);
+            return result;
         }
     }
 }
