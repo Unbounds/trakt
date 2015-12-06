@@ -13,5 +13,5 @@
         android:paddingBottom="@dimen/gap_16"
         android:paddingTop="@dimen/gap_16"
         android:scrollbarStyle="outsideInset"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical" />
 </android.support.v4.widget.SwipeRefreshLayout>
