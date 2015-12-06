@@ -12,7 +12,6 @@ import android.webkit.WebViewClient;
 import com.unbounds.trakt.ApiWrapper;
 import com.unbounds.trakt.BuildConfig;
 import com.unbounds.trakt.R;
-import com.unbounds.trakt.api.HttpRequest;
 import com.unbounds.trakt.api.model.request.Code;
 import com.unbounds.trakt.api.model.response.Token;
 
@@ -60,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             ApiWrapper.getToken(code).subscribe(new Action1<Token>() {
                 @Override
                 public void call(final Token token) {
-                    HttpRequest.HEADERS.put("Authorization", String.format("Bearer %s", token.getAccessToken()));
+                    LoginManager.getInstance().setToken(token);
                     setResult(RESULT_OK);
                     finish();
                 }
