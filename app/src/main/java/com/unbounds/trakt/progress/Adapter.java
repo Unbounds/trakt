@@ -88,7 +88,6 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             holder.mProgressBar.setProgress(percentage);
             holder.mCheck.setEnabled(true);
             holder.mCheck.setSelected(selected);
-            holder.position = position;
         } else {
             holder.mEpisodeTitle.setText(mContext.getText(R.string.progress_loading));
             holder.mProgressText.setText("");
@@ -146,7 +145,6 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         private final TextView mProgressText;
         private final ProgressBar mProgressBar;
         private final View mCheck;
-        private int position;
         private boolean mLoaded;
 
         public ViewHolder(final View view, final OnClicked listener) {
@@ -162,7 +160,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 public void onClick(final View view) {
                     if (mCheck.isSelected() || !mLoaded) return;
                     mCheck.setSelected(true);
-                    listener.onCheckClicked(position);
+                    listener.onCheckClicked(getAdapterPosition());
                 }
             });
         }
