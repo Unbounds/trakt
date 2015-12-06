@@ -2,10 +2,12 @@ package com.unbounds.trakt;
 
 import com.unbounds.trakt.api.HttpRequest;
 import com.unbounds.trakt.api.RxRequest;
+import com.unbounds.trakt.api.model.Show;
 import com.unbounds.trakt.api.model.request.Code;
 import com.unbounds.trakt.api.model.request.WatchedItems;
 import com.unbounds.trakt.api.model.response.AddHistory;
 import com.unbounds.trakt.api.model.response.Token;
+import com.unbounds.trakt.api.model.response.TrendingShow;
 import com.unbounds.trakt.api.model.response.WatchedProgress;
 import com.unbounds.trakt.api.model.response.WatchedShow;
 
@@ -15,6 +17,7 @@ import rx.Observable;
  * Created by maclir on 11/7/15.
  */
 public class ApiWrapper {
+
     public static Observable<Token> getToken(final Code code) {
         return new RxRequest() {
             @Override
@@ -49,5 +52,23 @@ public class ApiWrapper {
                 return new HttpRequest("/sync/history").post(watchedItems);
             }
         }.asObservable(AddHistory.class);
+    }
+
+    public static Observable<TrendingShow[]> getTrendingShows() {
+        return new RxRequest() {
+            @Override
+            protected HttpRequest request() {
+                return new HttpRequest("/shows/trending?extended=images").get();
+            }
+        }.asObservable(TrendingShow[].class);
+    }
+
+    public static Observable<Show[]> getPopularShows() {
+        return new RxRequest() {
+            @Override
+            protected HttpRequest request() {
+                return new HttpRequest("/shows/popular?extended=images").get();
+            }
+        }.asObservable(Show[].class);
     }
 }
