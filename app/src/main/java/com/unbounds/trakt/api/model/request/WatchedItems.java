@@ -23,9 +23,9 @@ public class WatchedItems {
 
     public static class Builder {
 
-        private List<Movie> mMovies = new ArrayList<>();
-        private List<Show> mShows = new ArrayList<>();
-        private List<Episode> mEpisodes = new ArrayList<>();
+        private final List<Movie> mMovies = new ArrayList<>();
+        private final List<Show> mShows = new ArrayList<>();
+        private final List<Episode> mEpisodes = new ArrayList<>();
 
         public Builder addMovie(final Movie movie) {
             mMovies.add(movie);

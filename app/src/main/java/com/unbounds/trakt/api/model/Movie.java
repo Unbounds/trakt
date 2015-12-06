@@ -8,7 +8,7 @@ public class Movie {
     private final long year;
     private final Ids ids;
 
-    public Movie(String title, long year, Ids ids) {
+    public Movie(final String title, final long year, final Ids ids) {
         this.title = title;
         this.year = year;
         this.ids = ids;
@@ -32,7 +32,7 @@ public class Movie {
         private final String imdb;
         private final long tmdb;
 
-        public Ids(long trakt, String slug, String imdb, long tmdb) {
+        public Ids(final long trakt, final String slug, final String imdb, final long tmdb) {
             this.trakt = trakt;
             this.slug = slug;
             this.imdb = imdb;

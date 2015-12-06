@@ -7,7 +7,7 @@ public final class Person {
     private final String name;
     private final Ids ids;
 
-    public Person(String name, Ids ids) {
+    public Person(final String name, final Ids ids) {
         this.name = name;
         this.ids = ids;
     }
@@ -27,7 +27,7 @@ public final class Person {
         private final long tmdb;
         private final long tvrage;
 
-        public Ids(long trakt, String slug, String imdb, long tmdb, long tvrage) {
+        public Ids(final long trakt, final String slug, final String imdb, final long tmdb, final long tvrage) {
             this.trakt = trakt;
             this.slug = slug;
             this.imdb = imdb;

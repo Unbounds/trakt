@@ -9,7 +9,7 @@ public class Episode {
     private final String title;
     private final Ids ids;
 
-    public Episode(long season, long number, String title, Ids ids) {
+    public Episode(final long season, final long number, final String title, final Ids ids) {
         this.season = season;
         this.number = number;
         this.title = title;
@@ -39,7 +39,7 @@ public class Episode {
         private final long tmdb;
         private final long tvrage;
 
-        public Ids(long trakt, long tvdb, String imdb, long tmdb, long tvrage) {
+        public Ids(final long trakt, final long tvdb, final String imdb, final long tmdb, final long tvrage) {
             this.trakt = trakt;
             this.tvdb = tvdb;
             this.imdb = imdb;

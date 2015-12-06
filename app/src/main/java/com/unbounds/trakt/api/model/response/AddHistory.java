@@ -29,7 +29,7 @@ public final class AddHistory {
         private final long movies;
         private final long episodes;
 
-        private Added(long movies, long episodes) {
+        private Added(final long movies, final long episodes) {
             this.movies = movies;
             this.episodes = episodes;
         }
