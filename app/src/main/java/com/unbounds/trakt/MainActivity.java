@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == LOGIN_REQUEST) {
             if (resultCode == RESULT_OK) {
-                this.getFragmentManager().beginTransaction().replace(R.id.fragment_content, new ProgressFragment()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_content, new ProgressFragment()).commit();
             }
         }
     }
