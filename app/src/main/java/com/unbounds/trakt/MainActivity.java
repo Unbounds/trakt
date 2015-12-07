@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.unbounds.trakt.login.LoginActivity;
+import com.unbounds.trakt.login.LoginManager;
 import com.unbounds.trakt.progress.ProgressFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -32,6 +34,10 @@ public class MainActivity extends AppCompatActivity
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (LoginManager.getInstance().isLoggedIn()) {
+            getFragmentManager().beginTransaction().replace(R.id.fragment_content, new ProgressFragment()).commit();
+        }
     }
 
     @Override
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == LOGIN_REQUEST) {
             if (resultCode == RESULT_OK) {
-                this.getFragmentManager().beginTransaction().replace(R.id.fragment_content, new ProgressFragment()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_content, new ProgressFragment()).commit();
             }
         }
     }
