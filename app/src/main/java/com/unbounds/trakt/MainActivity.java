@@ -8,6 +8,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.unbounds.trakt.login.LoginActivity;
@@ -58,8 +60,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_login) {
             startActivityForResult(LoginActivity.createIntent(MainActivity.this), LOGIN_REQUEST);
-        } else if (id == R.id.nav_search) {
-            this.getFragmentManager().beginTransaction().replace(R.id.fragment_content, new SearchFragment()).commit();
+        } else if (id == R.id.nav_popular) {
+            getFragmentManager().beginTransaction().replace(R.id.fragment_content, SearchFragment.createInstance(SearchFragment.Type.POPULAR)).commit();
 
         } else if (id == R.id.nav_trending) {
             getFragmentManager().beginTransaction().replace(R.id.fragment_content, SearchFragment.createInstance(SearchFragment.Type.TRENDING)).commit();
@@ -77,5 +79,13 @@ public class MainActivity extends AppCompatActivity
                 getFragmentManager().beginTransaction().replace(R.id.fragment_content, new ProgressFragment()).commit();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        final MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+
+        return true;
     }
 }
