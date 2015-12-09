@@ -2,6 +2,7 @@ package com.unbounds.trakt;
 
 import com.unbounds.trakt.api.HttpRequest;
 import com.unbounds.trakt.api.RxRequest;
+import com.unbounds.trakt.api.model.Season;
 import com.unbounds.trakt.api.model.Show;
 import com.unbounds.trakt.api.model.request.Code;
 import com.unbounds.trakt.api.model.request.WatchedItems;
@@ -77,8 +78,17 @@ public class ApiWrapper {
         return new RxRequest() {
             @Override
             protected HttpRequest request() {
-                return new HttpRequest("/search?query=" + query).get();
+                return new HttpRequest("/search?query=" + query + "&type=show").get();
             }
         }.asObservable(SearchResult[].class);
+    }
+
+    public static Observable<Season[]> getSeasonsEpisodes(final String id) {
+        return new RxRequest() {
+            @Override
+            protected HttpRequest request() {
+                return new HttpRequest("/shows/" + id + "/seasons?extended=episodes").get();
+            }
+        }.asObservable(Season[].class);
     }
 }

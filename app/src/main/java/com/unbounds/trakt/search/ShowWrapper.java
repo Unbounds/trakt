@@ -2,10 +2,12 @@ package com.unbounds.trakt.search;
 
 import com.unbounds.trakt.api.model.Show;
 
+import java.io.Serializable;
+
 /**
  * Created by Eff on 12/8/15.
  */
-public class ShowWrapper {
+public class ShowWrapper implements Serializable {
 
     private final Long mWatchers;
     private final Show mShow;

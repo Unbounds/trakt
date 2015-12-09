@@ -1,9 +1,11 @@
 package com.unbounds.trakt.api.model;
 
+import java.io.Serializable;
+
 /**
  * Created by maclir on 2015-11-21.
  */
-public class Show {
+public class Show implements Serializable {
     private final String title;
     private final long year;
     private final String overview;

@@ -50,7 +50,7 @@ class Adapter extends BaseAdapter {
         }
 
         final Show show = mWrappedShows.get(position).getShow();
-        Picasso.with(mContext).load(show.getImages().getPoster().getThumb()).into(viewHolder.mShowPoster);
+        Picasso.with(mContext).load(show.getImages().getPoster().getMedium()).into(viewHolder.mShowPoster);
         viewHolder.mShowTitle.setText(show.getTitle());
         viewHolder.mShowYear.setText(String.valueOf(show.getYear()));
         if (mWrappedShows.get(position).hasWatchers()) {
@@ -70,7 +70,14 @@ class Adapter extends BaseAdapter {
     }
 
     public void setData(final ShowWrapper[] shows) {
+        mWrappedShows.clear();
         mWrappedShows.addAll(Arrays.asList(shows));
+        notifyDataSetChanged();
+    }
+
+
+    public void clear() {
+        mWrappedShows.clear();
         notifyDataSetChanged();
     }
 
