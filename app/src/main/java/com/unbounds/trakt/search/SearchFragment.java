@@ -10,6 +10,7 @@ import android.widget.GridView;
 import com.unbounds.trakt.ApiWrapper;
 import com.unbounds.trakt.R;
 import com.unbounds.trakt.api.model.Show;
+import com.unbounds.trakt.api.model.response.SearchResult;
 import com.unbounds.trakt.api.model.response.TrendingShow;
 import com.unbounds.trakt.json.JsonSerializer;
 
@@ -25,13 +26,23 @@ public class SearchFragment extends Fragment {
 
     public enum Type {
         TRENDING,
-        POPULAR
+        POPULAR,
+        SEARCH
     }
 
     public static SearchFragment createInstance(final Type type) {
         final SearchFragment fragment = new SearchFragment();
         final Bundle bundle = new Bundle();
         bundle.putString(ARGUMENT_TYPE, JsonSerializer.toJson(type));
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static SearchFragment createInstance(final Type type, String query) {
+        final SearchFragment fragment = new SearchFragment();
+        final Bundle bundle = new Bundle();
+        bundle.putString(ARGUMENT_TYPE, JsonSerializer.toJson(type));
+        bundle.putString("SEARCH_QUERY", query);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -78,6 +89,15 @@ public class SearchFragment extends Fragment {
                 public void call(final ShowWrapper[] showWrappers) {
                     adapter.setData(showWrappers);
                     gridview.setAdapter(adapter);
+                }
+            });
+        } else if (type == Type.SEARCH) {
+
+            String searchQuery = getArguments().getString("SEARCH_QUERY");
+            ApiWrapper.search(searchQuery).subscribe(new Action1<SearchResult[]>() {
+                @Override
+                public void call(SearchResult[] searchResults) {
+
                 }
             });
         }

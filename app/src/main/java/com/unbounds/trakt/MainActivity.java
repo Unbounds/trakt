@@ -1,5 +1,7 @@
 package com.unbounds.trakt;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -7,15 +9,19 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.unbounds.trakt.api.model.response.SearchResult;
 import com.unbounds.trakt.login.LoginActivity;
 import com.unbounds.trakt.login.LoginManager;
 import com.unbounds.trakt.progress.ProgressFragment;
 import com.unbounds.trakt.search.SearchFragment;
+
+import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -41,6 +47,8 @@ public class MainActivity extends AppCompatActivity
         if (LoginManager.getInstance().isLoggedIn()) {
             getFragmentManager().beginTransaction().replace(R.id.fragment_content, new ProgressFragment()).commit();
         }
+
+        handleIntent(getIntent());
     }
 
     @Override
@@ -86,6 +94,37 @@ public class MainActivity extends AppCompatActivity
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
 
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.search) {
+            onSearchRequested();
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+        return super.onSearchRequested();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+        }
     }
 }

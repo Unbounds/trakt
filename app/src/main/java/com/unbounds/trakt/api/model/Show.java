@@ -6,14 +6,18 @@ package com.unbounds.trakt.api.model;
 public class Show {
     private final String title;
     private final long year;
+    private final String overview;
+    private final String status;
     private final Images images;
     private final Ids ids;
 
-    public Show(final String title, final long year, final Images images, final Ids ids) {
+    public Show(final String title, final String overview, final long year, String status, final Images images, final Ids ids) {
         this.title = title;
         this.year = year;
         this.images = images;
         this.ids = ids;
+        this.overview = overview;
+        this.status = status;
     }
 
     public Images getImages() {
@@ -30,6 +34,14 @@ public class Show {
 
     public Ids getIds() {
         return ids;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     @Override

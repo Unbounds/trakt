@@ -6,6 +6,7 @@ import com.unbounds.trakt.api.model.Show;
 import com.unbounds.trakt.api.model.request.Code;
 import com.unbounds.trakt.api.model.request.WatchedItems;
 import com.unbounds.trakt.api.model.response.AddHistory;
+import com.unbounds.trakt.api.model.response.SearchResult;
 import com.unbounds.trakt.api.model.response.Token;
 import com.unbounds.trakt.api.model.response.TrendingShow;
 import com.unbounds.trakt.api.model.response.WatchedProgress;
@@ -70,5 +71,14 @@ public class ApiWrapper {
                 return new HttpRequest("/shows/popular?extended=images").get();
             }
         }.asObservable(Show[].class);
+    }
+
+    public static Observable<SearchResult[]> search(final String query) {
+        return new RxRequest() {
+            @Override
+            protected HttpRequest request() {
+                return new HttpRequest("/search?query=" + query).get();
+            }
+        }.asObservable(SearchResult[].class);
     }
 }

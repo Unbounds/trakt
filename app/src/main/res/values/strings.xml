@@ -9,4 +9,5 @@
 
     <!-- Progress fragment -->
     <string name="progress_loading">Loading…</string>
+    <string name="search_hint">Search</string>
 </resources>
