@@ -86,6 +86,12 @@ public class ProgressFragment extends Fragment {
             }
         });
         ApiWrapper.getWatchedShows().subscribe(loadShowsAction);
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
 
         return view;
     }
