@@ -1,0 +1,15 @@
+machine:
+  java:
+    version: openjdk8
+dependencies:
+  pre:
+    - echo "client_id=$CLIENT_ID\nclient_secret=$CLIENT_SECRET" > trakt.properties
+    - ./gradlew dependencies
+  cache_directories:
+    - ~/.android
+    - ~/.gradle
+test:
+  pre:
+    - ./gradlew assembleRelease
+  override:
+    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
