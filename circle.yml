@@ -4,6 +4,9 @@ machine:
 dependencies:
   pre:
     - echo "client_id=$CLIENT_ID\nclient_secret=$CLIENT_SECRET" > trakt.properties
+    - echo y | android update sdk --no-ui --all --filter "platform-tools, extra-android-support, extra-google-m2repository, extra-android-m2repository"
+    - echo y | android update sdk --no-ui --all --filter "build-tools-25.0.0"
+    - echo y | android update sdk --no-ui --all --filter "android-25"
     - ./gradlew dependencies --console=plain
   cache_directories:
     - ~/.android
