@@ -4,6 +4,7 @@ machine:
 dependencies:
   pre:
     - echo -e "client_id=$CLIENT_ID\nclient_secret=$CLIENT_SECRET" > trakt.properties
+    - curl -L -o app/keystore ${KEYSTORE_URI}
     - echo y | android update sdk --no-ui --all --filter "platform-tools, extra-google-m2repository"
     - if ! $(grep -q "Revision=44.0.0" /usr/local/android-sdk-linux/extras/android/m2repository/source.properties); then echo y | android update sdk --all --no-ui --filter "extra-android-m2repository"; fi;
     - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-25" ]; then echo y | android update sdk --no-ui --all --filter "android-25"; fi
@@ -14,6 +15,6 @@ dependencies:
     - ~/.gradle
 test:
   pre:
-    - ./gradlew assembleRelease --console=plain
+    - ./gradlew assembleRelease -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_password=$KEY_PASSWORD --console=plain
   override:
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
