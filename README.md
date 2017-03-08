@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/unbounds/trakt.svg?style=shield)](https://circleci.com/gh/unbounds/trakt)
+[![CircleCI](https://circleci.com/gh/Unbounds/trakt.svg?style=shield)](https://circleci.com/gh/Unbounds/trakt)
 
 # trakt
 Trakt android application
