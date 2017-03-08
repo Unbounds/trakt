@@ -4,12 +4,12 @@ machine:
 dependencies:
   pre:
     - echo "client_id=$CLIENT_ID\nclient_secret=$CLIENT_SECRET" > trakt.properties
-    - ./gradlew dependencies
+    - ./gradlew dependencies --console=plain
   cache_directories:
     - ~/.android
     - ~/.gradle
 test:
   pre:
-    - ./gradlew assembleRelease
+    - ./gradlew assembleRelease --console=plain
   override:
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
