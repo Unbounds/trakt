@@ -40,6 +40,6 @@ jobs:
           name: Move apk
           command: cp -r app/build/outputs $CIRCLE_ARTIFACTS
       - store_test_results:
-          path: $CIRCLE_TEST_REPORTS
+          path: /tmp/circleci-test-results
       - store_artifacts:
-          path: $CIRCLE_ARTIFACTS
+          path: /tmp/circleci-artifacts
