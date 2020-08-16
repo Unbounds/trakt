@@ -23,7 +23,7 @@ class ProgressViewModel @Inject constructor(private val repository: ShowReposito
             loadingCounter++
             mediator.addSource(repository.getProgress(watchedShow.show.ids.trakt)) { progress ->
                 val nextEpisode = progress.next_episode
-                if (nextEpisode != null) {
+                if (nextEpisode != null && !progress.isCompleted) {
                     val loadedList = mediator.value ?: listOf()
                     val progressPercentage = progress.completed * 100 / progress.aired
                     val episode = NextEpisode(

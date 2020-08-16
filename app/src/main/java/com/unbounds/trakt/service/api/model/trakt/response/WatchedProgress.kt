@@ -14,7 +14,6 @@ data class WatchedProgress(
         val hidden_seasons: List<Season>,
         val next_episode: Episode?,
 ) {
-
-    val isCompleted = aired == completed
-
+    val isCompleted: Boolean
+        get() = aired == completed
 }
