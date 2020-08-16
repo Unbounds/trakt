@@ -12,12 +12,12 @@ android {
         }
     }
 
-    compileSdkVersion 27
+    compileSdkVersion 29
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.unbounds.trakt"
-        minSdkVersion 16
-        targetSdkVersion 27
+        minSdkVersion 21
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
