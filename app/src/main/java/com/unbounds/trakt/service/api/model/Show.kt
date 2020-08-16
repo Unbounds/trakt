@@ -11,8 +11,8 @@ data class Show(
 
 data class ShowIds(
         val trakt: Long,
-        val slug: String?,
-        val tvdb: Long,
+        val slug: String,
+        val tvdb: Long?,
         val imdb: String,
-        val tmdb: Long,
+        val tmdb: Long?,
 )

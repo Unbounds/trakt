@@ -11,5 +11,5 @@ data class Season(
 data class SeasonIds(
         val trakt: Long,
         val tvdb: Long,
-        val tmdb: Long,
+        val tmdb: Long?,
 )

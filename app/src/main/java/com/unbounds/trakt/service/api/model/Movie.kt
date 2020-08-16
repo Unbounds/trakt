@@ -13,5 +13,5 @@ data class MovieIds(
         val trakt: Long,
         val slug: String,
         val imdb: String,
-        val tmdb: Long,
+        val tmdb: Long?,
 )
