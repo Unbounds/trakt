@@ -24,7 +24,7 @@ jobs:
           command: curl -L -o app/keystore ${KEYSTORE_URI}
       - run:
           name: Create trakt.properties
-          command: echo -e "client_id=$CLIENT_ID\nclient_secret=$CLIENT_SECRET" > trakt.properties
+          command: echo -e "client_id=$CLIENT_ID\nclient_secret=$CLIENT_SECRET\ntmdb_key=$TMDB_KEY" > trakt.properties
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
