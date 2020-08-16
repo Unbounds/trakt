@@ -2,7 +2,7 @@ package com.unbounds.trakt.widget;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 /**
