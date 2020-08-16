@@ -1,13 +1,36 @@
+# Android studio
+*.iml
+.idea/*
+.idea
+
+# Gradle
 .gradle
-/local.properties
-/.idea
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
-/build
-/captures
-app.iml
+
+# Local configurations
+local.properties
 trakt.properties
 trakt_staging.properties
 gradle.properties
+
+# Mac generated files
+.DS_Store
+
+# Build files
+build/
+captures/
+
+# Keystore
 keystore
+
+# IDEA/Android Studio Ignore exceptions
+!.idea/vcs.xml
+!.idea/fileTemplates/
+!.idea/inspectionProfiles/
+!.idea/scopes/
+!.idea/codeStyleSettings.xml
+!.idea/encodings.xml
+!.idea/copyright/
+!.idea/compiler.xml
+
+# Vim temp files
+*.swp
