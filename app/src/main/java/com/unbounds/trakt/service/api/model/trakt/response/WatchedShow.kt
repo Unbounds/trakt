@@ -1,6 +1,6 @@
-package com.unbounds.trakt.service.api.model.response
+package com.unbounds.trakt.service.api.model.trakt.response
 
-import com.unbounds.trakt.service.api.model.Show
+import com.unbounds.trakt.service.api.model.trakt.Show
 
 /**
  * Created by maclir on 2015-11-17.

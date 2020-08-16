@@ -1,18 +1,17 @@
-package com.unbounds.trakt.service.api.model
+package com.unbounds.trakt.service.api.model.trakt
 
 /**
  * Created by maclir on 2015-11-21.
  */
-data class Show(
+data class Movie(
         val title: String,
         val year: Long,
-        val ids: ShowIds,
+        val ids: MovieIds,
 )
 
-data class ShowIds(
+data class MovieIds(
         val trakt: Long,
         val slug: String,
-        val tvdb: Long?,
         val imdb: String,
         val tmdb: Long?,
 )

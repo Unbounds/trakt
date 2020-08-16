@@ -1,10 +1,16 @@
 package com.unbounds.trakt.viewmodel
 
 import androidx.lifecycle.*
+import com.unbounds.trakt.service.api.IMAGE_PREFIX
 import com.unbounds.trakt.service.repository.ShowRepository
+import com.unbounds.trakt.service.repository.TmdbRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class ProgressViewModel @Inject constructor(private val repository: ShowRepository) : ViewModel() {
+class ProgressViewModel @Inject constructor(private val repository: ShowRepository, private val tmdbRepository: TmdbRepository) : ViewModel() {
 
 
     private val mediator = MediatorLiveData<List<NextEpisode>>()
@@ -31,9 +37,19 @@ class ProgressViewModel @Inject constructor(private val repository: ShowReposito
                             showTitle = watchedShow.show.title,
                             progress = progressPercentage.toInt(),
                             progressText = String.format("%d/%d (%d%%)", progress.completed, progress.aired, progressPercentage),
-                            selected = false,
                     )
                     mediator.value = loadedList.filterNot { oldProgress -> oldProgress.showId == episode.showId }.plus(episode)
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val showId = watchedShow.show.ids.tmdb ?: return@launch
+                        val images = tmdbRepository.getImages(showId.toInt(), nextEpisode.season.toInt(), nextEpisode.number.toInt())
+                        if (images.isNullOrEmpty()) return@launch
+
+                        withContext(Dispatchers.Main) {
+                            val newList = mediator.value ?: listOf()
+                            mediator.value = newList.filterNot { oldProgress -> oldProgress.showId == episode.showId }.plus(NextEpisode(episode, "$IMAGE_PREFIX${images.first().file_path}"))
+                        }
+                    }
                 }
                 loadingCounter--
                 if (loadingCounter <= 0) {
@@ -53,13 +69,7 @@ class ProgressViewModel @Inject constructor(private val repository: ShowReposito
         val loadedList = mediator.value ?: listOf()
         mediator.value = loadedList.filterNot { oldProgress -> oldProgress.showId == episode.showId }.plus(
                 NextEpisode(
-                        lastWatchedAt = episode.lastWatchedAt,
-                        episodeId = episode.episodeId,
-                        episodeTitle = episode.episodeTitle,
-                        showId = episode.showId,
-                        showTitle = episode.showTitle,
-                        progress = episode.progress,
-                        progressText = episode.progressText,
+                        episode,
                         selected = true,
                 )
         )
@@ -80,5 +90,9 @@ data class NextEpisode(
         val showTitle: String,
         val progress: Int,
         val progressText: String,
-        val selected: Boolean,
-)
+        val imageUrl: String? = null,
+        val selected: Boolean = false,
+) {
+    constructor(episode: NextEpisode, selected: Boolean) : this(episode.lastWatchedAt, episode.episodeId, episode.episodeTitle, episode.showId, episode.showTitle, episode.progress, episode.progressText, episode.imageUrl, selected)
+    constructor(episode: NextEpisode, imageUrl: String) : this(episode.lastWatchedAt, episode.episodeId, episode.episodeTitle, episode.showId, episode.showTitle, episode.progress, episode.progressText, imageUrl, episode.selected)
+}

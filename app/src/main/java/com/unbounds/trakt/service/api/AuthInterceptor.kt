@@ -1,7 +1,7 @@
 package com.unbounds.trakt.service.api
 
 import android.content.SharedPreferences
-import com.unbounds.trakt.service.api.model.response.Token
+import com.unbounds.trakt.service.api.model.trakt.response.Token
 import com.unbounds.trakt.utils.JsonSerializer
 import okhttp3.Interceptor
 import okhttp3.Response

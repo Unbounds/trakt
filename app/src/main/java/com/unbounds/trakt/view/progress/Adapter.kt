@@ -7,6 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.unbounds.trakt.R
 import com.unbounds.trakt.viewmodel.NextEpisode
 import kotlinx.android.synthetic.main.progress_item.view.*
@@ -40,11 +41,11 @@ class Adapter(private val listener: OnClicked) : ListAdapter<NextEpisode, Adapte
             })
         }
 
-
         fun bind(episode: NextEpisode) {
             this.nextEpisode = episode
 
             with(episode) {
+                Picasso.get().load(imageUrl).fit().into(view.progress_item_show_poster)
                 view.progress_item_show_title.text = showTitle
                 view.progress_item_episode_title.text = episodeTitle
                 view.progress_item_progress_text.text = progressText

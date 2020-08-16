@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.RecyclerView
 import com.unbounds.trakt.R
 import com.unbounds.trakt.viewmodel.NextEpisode
 import com.unbounds.trakt.viewmodel.ProgressViewModel
@@ -29,6 +31,16 @@ class ProgressFragment : Fragment() {
             }
         })
         progress_recycle_view.adapter = adapter
+        progress_recycle_view.itemAnimator = object : DefaultItemAnimator() {
+            init {
+                supportsChangeAnimations = false
+            }
+
+            override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
+                dispatchRemoveFinished(holder)
+                return false
+            }
+        }
 
         progress_swipe_refresh_layout.setColorSchemeResources(
                 R.color.moonlight_blue,

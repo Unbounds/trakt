@@ -1,4 +1,4 @@
-package com.unbounds.trakt.service.api.model
+package com.unbounds.trakt.service.api.model.trakt
 
 /**
  * Created by maclir on 2015-11-21.

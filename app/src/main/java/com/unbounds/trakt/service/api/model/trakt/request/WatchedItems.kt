@@ -1,7 +1,7 @@
-package com.unbounds.trakt.service.api.model.request
+package com.unbounds.trakt.service.api.model.trakt.request
 
-import com.unbounds.trakt.service.api.model.Movie
-import com.unbounds.trakt.service.api.model.Show
+import com.unbounds.trakt.service.api.model.trakt.Movie
+import com.unbounds.trakt.service.api.model.trakt.Show
 
 /**
  * Created by maclir on 2015-11-21.

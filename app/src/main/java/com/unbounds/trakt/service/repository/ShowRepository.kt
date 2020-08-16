@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.unbounds.trakt.service.api.TraktApi
-import com.unbounds.trakt.service.api.model.request.Episode
-import com.unbounds.trakt.service.api.model.request.EpisodeIds
-import com.unbounds.trakt.service.api.model.request.WatchedItems
-import com.unbounds.trakt.service.api.model.response.WatchedProgress
-import com.unbounds.trakt.service.api.model.response.WatchedShow
+import com.unbounds.trakt.service.api.model.trakt.request.Episode
+import com.unbounds.trakt.service.api.model.trakt.request.EpisodeIds
+import com.unbounds.trakt.service.api.model.trakt.request.WatchedItems
+import com.unbounds.trakt.service.api.model.trakt.response.WatchedProgress
+import com.unbounds.trakt.service.api.model.trakt.response.WatchedShow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -13,7 +13,7 @@ import com.unbounds.trakt.BuildConfig
 import com.unbounds.trakt.R
 import com.unbounds.trakt.service.api.AuthInterceptor
 import com.unbounds.trakt.service.api.TraktApi
-import com.unbounds.trakt.service.api.model.request.Code
+import com.unbounds.trakt.service.api.model.trakt.request.Code
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject

@@ -1,11 +1,11 @@
 package com.unbounds.trakt.service.api
 
-import com.unbounds.trakt.service.api.model.request.Code
-import com.unbounds.trakt.service.api.model.request.WatchedItems
-import com.unbounds.trakt.service.api.model.response.AddHistory
-import com.unbounds.trakt.service.api.model.response.Token
-import com.unbounds.trakt.service.api.model.response.WatchedProgress
-import com.unbounds.trakt.service.api.model.response.WatchedShow
+import com.unbounds.trakt.service.api.model.trakt.request.Code
+import com.unbounds.trakt.service.api.model.trakt.request.WatchedItems
+import com.unbounds.trakt.service.api.model.trakt.response.AddHistory
+import com.unbounds.trakt.service.api.model.trakt.response.Token
+import com.unbounds.trakt.service.api.model.trakt.response.WatchedProgress
+import com.unbounds.trakt.service.api.model.trakt.response.WatchedShow
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.Body

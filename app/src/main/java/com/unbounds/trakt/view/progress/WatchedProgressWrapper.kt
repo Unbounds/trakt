@@ -1,7 +1,7 @@
 package com.unbounds.trakt.view.progress
 
-import com.unbounds.trakt.service.api.model.Show
-import com.unbounds.trakt.service.api.model.response.WatchedProgress
+import com.unbounds.trakt.service.api.model.trakt.Show
+import com.unbounds.trakt.service.api.model.trakt.response.WatchedProgress
 
 /**
  * Created by maclir on 2015-11-22.

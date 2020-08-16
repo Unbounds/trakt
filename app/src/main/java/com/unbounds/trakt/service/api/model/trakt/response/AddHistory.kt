@@ -1,9 +1,9 @@
-package com.unbounds.trakt.service.api.model.response
+package com.unbounds.trakt.service.api.model.trakt.response
 
-import com.unbounds.trakt.service.api.model.Episode
-import com.unbounds.trakt.service.api.model.Movie
-import com.unbounds.trakt.service.api.model.Season
-import com.unbounds.trakt.service.api.model.Show
+import com.unbounds.trakt.service.api.model.trakt.Episode
+import com.unbounds.trakt.service.api.model.trakt.Movie
+import com.unbounds.trakt.service.api.model.trakt.Season
+import com.unbounds.trakt.service.api.model.trakt.Show
 
 /**
  * Created by maclir on 2015-11-21.

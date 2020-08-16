@@ -1,4 +1,4 @@
-package com.unbounds.trakt.service.api.model.request
+package com.unbounds.trakt.service.api.model.trakt.request
 
 import com.unbounds.trakt.BuildConfig
 
