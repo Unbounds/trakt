@@ -10,7 +10,6 @@
 local.properties
 trakt.properties
 trakt_staging.properties
-gradle.properties
 
 # Mac generated files
 .DS_Store

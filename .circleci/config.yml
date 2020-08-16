@@ -1,0 +1,45 @@
+version: 2.1
+jobs:
+  build:
+    working_directory: ~/code
+    environment:
+      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
+      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+    docker:
+      - image: circleci/android:api-29
+        environment:
+          # kotlin.incremental=false and kotlin.compiler.execution.strategy=in-process are required due to an issue with the Kotlin compiler in
+          # memory constrained environments: https://youtrack.jetbrains.com/issue/KT-15562
+          JVM_OPTS: -Xmx4096m
+          GRADLE_OPTS: -Xmx1536m -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false
+    steps:
+      - checkout
+      - run:
+          name: Create artifact dirs
+          command: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Download keystore
+          command: curl -L -o app/keystore ${KEYSTORE_URI}
+      - run:
+          name: Create trakt.properties
+          command: echo -e "client_id=$CLIENT_ID\nclient_secret=$CLIENT_SECRET" > trakt.properties
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+          paths:
+            - ~/.android
+            - ~/.gradle
+      - run:
+          name: Build release
+          command: ./gradlew assembleRelease -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_password=$KEY_PASSWORD --console=plain
+      - run:
+          name: Move apk
+          command: cp -r app/build/outputs $CIRCLE_ARTIFACTS
+      - store_test_results:
+          path: $CIRCLE_TEST_REPORTS
+      - store_artifacts:
+          path: $CIRCLE_ARTIFACTS
