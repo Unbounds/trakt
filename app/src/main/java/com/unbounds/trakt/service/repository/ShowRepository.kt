@@ -14,7 +14,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ShowRepository @Inject constructor(private val api: TraktApi) {
+class ShowRepository @Inject constructor(
+        private val api: TraktApi,
+) {
 
     private val watchedShowsMutable = MutableLiveData<List<WatchedShow>>()
     val watchedShows: LiveData<List<WatchedShow>> = watchedShowsMutable.map {
