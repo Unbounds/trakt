@@ -12,7 +12,7 @@ import com.unbounds.trakt.R
 import com.unbounds.trakt.viewmodel.NextEpisode
 import com.unbounds.trakt.viewmodel.ProgressViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_progress.*
+import kotlinx.android.synthetic.main.progress_fragment.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,7 +21,7 @@ class ProgressFragment : Fragment() {
     @Inject
     lateinit var viewModel: ProgressViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.activity_progress, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.progress_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         progress_recycle_view.setHasFixedSize(true)
