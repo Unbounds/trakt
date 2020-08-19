@@ -3,16 +3,16 @@ package com.unbounds.trakt.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
-import com.unbounds.trakt.service.repository.ShowRepository
+import com.unbounds.trakt.service.repository.SearchRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ProgressViewModel @Inject constructor(private val repository: ShowRepository) : ViewModel() {
+class SearchViewModel @Inject constructor(private val repository: SearchRepository) : ViewModel() {
 
     val refreshing: LiveData<Boolean> = repository.refreshing
 
-    val items: LiveData<List<NextEpisode>> = repository.watchedShows.map { list ->
+    val items: LiveData<List<NextEpisode>> = repository.shows.map { list ->
         list.map { item ->
             val progressPercentage = item.progress.completed * 100 / item.progress.aired
             NextEpisode(
@@ -34,6 +34,5 @@ class ProgressViewModel @Inject constructor(private val repository: ShowReposito
 
     fun episodeWatched(episode: NextEpisode) = repository.episodeWatched(episode.showId, episode.episodeId)
 
-    fun reload() = repository.reload()
+    fun search(query: String) = repository.search(query)
 }
-

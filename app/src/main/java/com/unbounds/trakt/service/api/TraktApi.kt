@@ -2,16 +2,10 @@ package com.unbounds.trakt.service.api
 
 import com.unbounds.trakt.service.api.model.trakt.request.Code
 import com.unbounds.trakt.service.api.model.trakt.request.WatchedItems
-import com.unbounds.trakt.service.api.model.trakt.response.AddHistory
-import com.unbounds.trakt.service.api.model.trakt.response.Token
-import com.unbounds.trakt.service.api.model.trakt.response.WatchedProgress
-import com.unbounds.trakt.service.api.model.trakt.response.WatchedShow
+import com.unbounds.trakt.service.api.model.trakt.response.*
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface TraktApi {
 
@@ -23,6 +17,9 @@ interface TraktApi {
 
     @GET("shows/{showId}/progress/watched")
     fun getWatchedProgress(@Path("showId") showId: Long): Deferred<Response<WatchedProgress>>
+
+    @GET("search/show")
+    fun search(@Query("query") query: String): Deferred<Response<List<Search>>>
 
     @POST("sync/history")
     fun postWatchedItems(@Body watchedItems: WatchedItems): Deferred<Response<AddHistory>>

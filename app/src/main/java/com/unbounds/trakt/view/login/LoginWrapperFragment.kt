@@ -13,7 +13,7 @@ class LoginWrapperFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        findNavController().navigate(LoginWrapperFragmentDirections.actionPopOut())
+        findNavController().navigate(LoginWrapperFragmentDirections.actionPopOutLogin())
     }
 
     companion object {

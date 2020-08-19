@@ -6,21 +6,40 @@
     app:startDestination="@id/navigation_progress">
     <fragment
         android:id="@+id/navigation_progress"
-        android:name="com.unbounds.trakt.view.progress.ProgressFragment"
+        android:name="com.unbounds.trakt.view.shows.ProgressFragment"
         android:label="Progress"
-        tools:layout="@layout/progress_fragment" />
+        tools:layout="@layout/fragment_progress" />
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.unbounds.trakt.view.shows.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search">
+        <argument
+            android:name="query"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_login"
         android:name="com.unbounds.trakt.view.login.LoginWrapperFragment"
         android:label="Login"
         tools:layout="@layout/activity_login">
         <action
-            android:id="@+id/action_pop_out"
+            android:id="@+id/action_pop_out_login"
             app:destination="@id/navigation_progress"
             app:popUpTo="@id/navigation_progress"
             app:popUpToInclusive="true" />
     </fragment>
     <action
+        android:id="@+id/action_global_navigation_search"
+        app:destination="@id/navigation_search"
+        app:popUpTo="@id/navigation_search"
+        app:popUpToInclusive="true" />
+    <action
         android:id="@+id/action_global_navigation_login"
         app:destination="@id/navigation_login" />
+    <action
+        android:id="@+id/action_global_pop_out_search"
+        app:popUpTo="@id/navigation_search"
+        app:popUpToInclusive="true" />
 </navigation>

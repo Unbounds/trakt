@@ -1,4 +1,4 @@
-package com.unbounds.trakt.view.progress
+package com.unbounds.trakt.view.shows
 
 import android.view.LayoutInflater
 import android.view.View

@@ -9,7 +9,7 @@ import com.unbounds.trakt.service.api.model.trakt.Season
 data class WatchedProgress(
         val aired: Long,
         val completed: Long,
-        val last_watched_at: String,
+        val last_watched_at: String?,
         val seasons: List<ExtendedSeason>,
         val hidden_seasons: List<Season>,
         val next_episode: Episode?,

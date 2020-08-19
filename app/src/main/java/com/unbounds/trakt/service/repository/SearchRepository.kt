@@ -7,8 +7,8 @@ import com.unbounds.trakt.service.api.TraktApi
 import com.unbounds.trakt.service.api.model.trakt.request.Episode
 import com.unbounds.trakt.service.api.model.trakt.request.EpisodeIds
 import com.unbounds.trakt.service.api.model.trakt.request.WatchedItems
+import com.unbounds.trakt.service.api.model.trakt.response.Search
 import com.unbounds.trakt.service.api.model.trakt.response.WatchedProgress
-import com.unbounds.trakt.service.api.model.trakt.response.WatchedShow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 import kotlin.collections.set
 
 @Singleton
-class ShowRepository @Inject constructor(
+class SearchRepository @Inject constructor(
         private val api: TraktApi,
         private val tmdbApi: TmdbApi,
 ) {
@@ -28,10 +28,10 @@ class ShowRepository @Inject constructor(
 
     private val progressMutables = HashMap<Long, MutableLiveData<WatchedProgress>>()
     private val mediator = MediatorLiveData<List<ShowProgress>>()
-    private val watchedShowsMutable = MutableLiveData<List<WatchedShow>>()
-    val watchedShows = watchedShowsMutable.map { list ->
-        list.map { watchedShow ->
-            watchedShow.show
+    private val searchMutable = MutableLiveData<List<Search>>()
+    val shows = searchMutable.map { list ->
+        list.map { search ->
+            search.show
         }
     }.switchMap { list ->
         progressMutables.clear()
@@ -87,10 +87,10 @@ class ShowRepository @Inject constructor(
         }
     }
 
-    fun reload() = CoroutineScope(Dispatchers.IO).launch {
+    fun search(query: String) = CoroutineScope(Dispatchers.IO).launch {
         refreshingMutable.postValue(true)
-        watchedShowsMutable.postValue(listOf())
-        watchedShowsMutable.postValue(api.getWatchedShows().await().body() ?: listOf())
+        searchMutable.postValue(listOf())
+        searchMutable.postValue(api.search(query).await().body() ?: listOf())
     }
 
     fun episodeWatched(showId: Long, episodeId: Long) = CoroutineScope(Dispatchers.IO).launch {
@@ -107,4 +107,3 @@ class ShowRepository @Inject constructor(
         progressMutables[showId]?.postValue(api.getWatchedProgress(showId).await().body())
     }
 }
-

@@ -5,7 +5,7 @@ package com.unbounds.trakt.service.api.model.trakt
  */
 data class Show(
         val title: String,
-        val year: Long,
+        val year: Long?,
         val ids: ShowIds,
 )
 

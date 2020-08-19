@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">Trakt</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="login">Login</string>
-
-    <!-- Progress fragment -->
-    <string name="progress_loading">Loading…</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Show name</string>
 </resources>
