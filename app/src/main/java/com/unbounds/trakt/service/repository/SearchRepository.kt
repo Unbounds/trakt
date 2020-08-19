@@ -9,6 +9,7 @@ import com.unbounds.trakt.service.api.model.trakt.request.EpisodeIds
 import com.unbounds.trakt.service.api.model.trakt.request.WatchedItems
 import com.unbounds.trakt.service.api.model.trakt.response.Search
 import com.unbounds.trakt.service.api.model.trakt.response.WatchedProgress
+import com.unbounds.trakt.utils.replaceOrAdd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,8 +44,9 @@ class SearchRepository @Inject constructor(
 
             mediator.addSource(progressMutable) { progress ->
                 if (progress.next_episode != null && !progress.isCompleted) {
+                    val showProgress = ShowProgress(search.show, progress, progress.next_episode, search.score)
                     with(mediator.value ?: listOf()) {
-                        mediator.value = filterNot { loadedProgress -> loadedProgress.show.ids.trakt == showId }.plus(ShowProgress(search.show, progress, progress.next_episode, search.score))
+                        mediator.value = replaceOrAdd(showProgress) { loadedProgress -> loadedProgress.show.ids.trakt == showId }
                     }
 
                     CoroutineScope(Dispatchers.IO).launch {
@@ -55,7 +57,7 @@ class SearchRepository @Inject constructor(
 
                         withContext(Dispatchers.Main) {
                             with(mediator.value ?: listOf()) {
-                                mediator.value = filterNot { loadedProgress -> loadedProgress.show.ids.trakt == showId }.plus(ShowProgress(search.show, progress, progress.next_episode, search.score, "$IMAGE_PREFIX${images.first().file_path}"))
+                                mediator.value = replaceOrAdd(showProgress.copy(imageUrl = "$IMAGE_PREFIX${images.first().file_path}")) { loadedProgress -> loadedProgress.show.ids.trakt == showId }
                             }
                         }
                     }
@@ -92,11 +94,9 @@ class SearchRepository @Inject constructor(
     fun episodeWatched(showId: Long, episodeId: Long) = CoroutineScope(Dispatchers.IO).launch {
         withContext(Dispatchers.Main) {
             with(mediator.value ?: listOf()) {
-                val oldValue = find { loadedProgress -> loadedProgress.show.ids.trakt == showId }
-                        ?: return@with
-                mediator.value = minus(oldValue).plus(
-                        ShowProgress(oldValue.show, oldValue.progress, oldValue.nextEpisode, oldValue.sort, oldValue.imageUrl, true)
-                )
+                mediator.value = map {
+                    if (it.show.ids.trakt == showId) it.copy(loading = true) else it
+                }
             }
         }
         api.postWatchedItems(WatchedItems(episodes = listOf(Episode(ids = EpisodeIds(trakt = episodeId))))).await()
