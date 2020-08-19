@@ -35,7 +35,7 @@ class ShowRepository @Inject constructor(
         mediator.value = listOf()
         var loadingCounter = 0
 
-        refreshingMutable.value = list.isNotEmpty()
+        if (list.isEmpty()) refreshingMutable.value = false
         list.forEach { show ->
             loadingCounter++
             val showId = show.show.ids.trakt
@@ -88,7 +88,6 @@ class ShowRepository @Inject constructor(
 
     fun reload() = CoroutineScope(Dispatchers.IO).launch {
         refreshingMutable.postValue(true)
-        watchedShowsMutable.postValue(listOf())
         watchedShowsMutable.postValue(api.getWatchedShows().await().body() ?: listOf())
     }
 

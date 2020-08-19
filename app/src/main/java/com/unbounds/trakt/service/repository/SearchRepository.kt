@@ -35,7 +35,7 @@ class SearchRepository @Inject constructor(
         mediator.value = listOf()
         var loadingCounter = 0
 
-        refreshingMutable.value = list.isNotEmpty()
+        if (list.isEmpty()) refreshingMutable.value = false
         list.forEach { search ->
             loadingCounter++
             val showId = search.show.ids.trakt
@@ -87,7 +87,6 @@ class SearchRepository @Inject constructor(
 
     fun search(query: String) = CoroutineScope(Dispatchers.IO).launch {
         refreshingMutable.postValue(true)
-        searchMutable.postValue(listOf())
         searchMutable.postValue(api.search(query).await().body() ?: listOf())
     }
 
