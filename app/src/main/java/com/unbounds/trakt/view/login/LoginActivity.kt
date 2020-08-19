@@ -2,6 +2,7 @@ package com.unbounds.trakt.view.login
 
 import android.app.Activity
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -71,8 +72,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun createIntent(activity: Activity?): Intent {
-            return Intent(activity, LoginActivity::class.java)
+        fun createIntent(context: Context): Intent {
+            return Intent(context, LoginActivity::class.java)
         }
     }
 }
