@@ -7,7 +7,7 @@ import com.unbounds.trakt.service.api.model.trakt.Show
  */
 data class WatchedShow(
         val plays: Long,
-        val last_watched_at: String,
+        val last_watched_at: String?,
         val show: Show,
         val seasons: List<ExtendedSeason>
 )

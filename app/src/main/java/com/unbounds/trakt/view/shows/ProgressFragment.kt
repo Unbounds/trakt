@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.unbounds.trakt.R
@@ -50,13 +50,23 @@ class ProgressFragment : Fragment() {
         )
         progress_swipe_refresh_layout.setOnRefreshListener { viewModel.reload() }
 
-        viewModel.refreshing.observe(viewLifecycleOwner, Observer { refreshing ->
+        viewModel.refreshing.observe(viewLifecycleOwner) { refreshing ->
             progress_swipe_refresh_layout.isRefreshing = refreshing
-        })
+        }
 
-        viewModel.items.observe(viewLifecycleOwner, Observer { episodes ->
-            adapter.submitList(episodes)
-        })
+        var firstItem: NextEpisode? = null
+        viewModel.items.observe(viewLifecycleOwner) { episodes ->
+            adapter.submitList(episodes) {
+                if (firstItem == episodes.firstOrNull()) return@submitList
+                firstItem = episodes.firstOrNull()
+                with(progress_recycle_view) {
+                    if (!hasNestedScrollingParent(ViewCompat.TYPE_NON_TOUCH)) {
+                        startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_NON_TOUCH);
+                    }
+                    smoothScrollToPosition(0)
+                }
+            }
+        }
 
         viewModel.reload()
     }

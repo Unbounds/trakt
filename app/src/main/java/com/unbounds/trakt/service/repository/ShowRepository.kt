@@ -27,13 +27,9 @@ class ShowRepository @Inject constructor(
     val refreshing: LiveData<Boolean> = refreshingMutable
 
     private val progressMutables = HashMap<Long, MutableLiveData<WatchedProgress>>()
-    private val mediator = MediatorLiveData<List<ShowProgress>>()
+    private val mediator = MediatorLiveData<List<ShowProgress<String>>>()
     private val watchedShowsMutable = MutableLiveData<List<WatchedShow>>()
-    val watchedShows = watchedShowsMutable.map { list ->
-        list.map { watchedShow ->
-            watchedShow.show
-        }
-    }.switchMap { list ->
+    val watchedShows = watchedShowsMutable.switchMap { list ->
         progressMutables.clear()
         mediator.value = listOf()
         var loadingCounter = 0
@@ -41,25 +37,27 @@ class ShowRepository @Inject constructor(
         refreshingMutable.value = list.isNotEmpty()
         list.forEach { show ->
             loadingCounter++
-            val showId = show.ids.trakt
+            val showId = show.show.ids.trakt
             val progressMutable = getProgress(showId)
             progressMutables[showId] = progressMutable
 
             mediator.addSource(progressMutable) { progress ->
                 if (progress.next_episode != null && !progress.isCompleted) {
                     with(mediator.value ?: listOf()) {
-                        mediator.value = filterNot { loadedProgress -> loadedProgress.show.ids.trakt == showId }.plus(ShowProgress(show, progress, progress.next_episode))
+                        mediator.value = filterNot { loadedProgress -> loadedProgress.show.ids.trakt == showId }.plus(ShowProgress(show.show, progress, progress.next_episode, show.last_watched_at
+                                ?: ""))
                     }
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        val tmdbShowId = show.ids.tmdb ?: return@launch
+                        val tmdbShowId = show.show.ids.tmdb ?: return@launch
 
                         val images = tmdbApi.getImages(tmdbShowId.toInt(), progress.next_episode.season.toInt()).await().body()?.posters
                         if (images.isNullOrEmpty()) return@launch
 
                         withContext(Dispatchers.Main) {
                             with(mediator.value ?: listOf()) {
-                                mediator.value = filterNot { loadedProgress -> loadedProgress.show.ids.trakt == showId }.plus(ShowProgress(show, progress, progress.next_episode, "$IMAGE_PREFIX${images.first().file_path}"))
+                                mediator.value = filterNot { loadedProgress -> loadedProgress.show.ids.trakt == showId }.plus(ShowProgress(show.show, progress, progress.next_episode, show.last_watched_at
+                                        ?: "", "$IMAGE_PREFIX${images.first().file_path}"))
                             }
                         }
                     }
@@ -78,7 +76,7 @@ class ShowRepository @Inject constructor(
 
         mediator
     }.map { list ->
-        list.sortedByDescending { item -> item.progress.last_watched_at }
+        list.sortedByDescending { item -> item.sort }
     }.distinctUntilChanged()
 
     private fun getProgress(showId: Long) = MutableLiveData<WatchedProgress>().apply {
@@ -99,7 +97,7 @@ class ShowRepository @Inject constructor(
                 val oldValue = find { loadedProgress -> loadedProgress.show.ids.trakt == showId }
                         ?: return@with
                 mediator.value = minus(oldValue).plus(
-                        ShowProgress(oldValue.show, oldValue.progress, oldValue.nextEpisode, oldValue.imageUrl, true)
+                        ShowProgress(oldValue.show, oldValue.progress, oldValue.nextEpisode, oldValue.sort, oldValue.imageUrl, true)
                 )
             }
         }
