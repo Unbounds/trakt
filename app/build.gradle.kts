@@ -10,6 +10,7 @@ plugins {
     kotlin("android.extensions")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
+    id("com.github.triplet.play") version "2.8.0"
     id("androidx.navigation.safeargs.kotlin")
 }
 
@@ -42,6 +43,21 @@ val timestamp: String
 
 val latestVersion = "git describe --tags --abbrev=0".runCommand()
 
+fun updateReleaseNotes() {
+    val notes = "git tag -l --format=%(body) $latestVersion".runCommand()
+    if (notes.isNullOrBlank()) {
+        return
+    }
+
+    with(File("app/src/main/play/release-notes/en-US/default.txt")) {
+        if (!parentFile.mkdirs()) return
+        if (!exists()) if (!createNewFile()) return
+        printWriter().use { out ->
+            out.println(notes)
+        }
+    }
+}
+
 android {
     compileSdkVersion(29)
 
@@ -67,7 +83,7 @@ android {
     signingConfigs {
         register("release") {
             if (project.hasProperty("keystore_password") && project.hasProperty("key_password")) {
-                storeFile = file("keystore")
+                storeFile = file("upload-keystore.jks")
                 storePassword = "${project.property("keystore_password")}"
                 keyAlias = "trakt"
                 keyPassword = "${project.property("key_password")}"
@@ -112,6 +128,11 @@ android {
     }
 }
 
+play {
+    serviceAccountCredentials = file("key.json")
+    defaultToAppBundles = true
+}
+
 dependencies {
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
@@ -154,3 +175,9 @@ dependencies {
 
     testImplementation("junit:junit:4.13")
 }
+
+tasks.register("updateReleaseNotes") {
+    updateReleaseNotes()
+}
+
+tasks["publish"].dependsOn("updateReleaseNotes")

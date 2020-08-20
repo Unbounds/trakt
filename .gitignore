@@ -18,8 +18,14 @@ trakt_staging.properties
 build/
 captures/
 
+# play release notes
+**/play/**/default.txt
+
 # Keystore
-keystore
+upload-keystore.jks
+
+# upload key
+app/key.json
 
 # IDEA/Android Studio Ignore exceptions
 !.idea/vcs.xml
