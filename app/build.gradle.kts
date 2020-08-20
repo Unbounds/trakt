@@ -103,9 +103,9 @@ android {
 
             buildConfigField("String", "CLIENT_ID", "\"${prop.getProperty("client_id")}\"")
             buildConfigField("String", "CLIENT_SECRET", "\"${prop.getProperty("client_secret")}\"")
-            buildConfigField("String", "TMDB_KEY", "\"${prop.getProperty("tmdb_key")}\"")
-            buildConfigField("String", "BASE_API_URL", "\"https://api-v2launch.trakt.tv\"")
             buildConfigField("String", "BASE_URL", "\"https://trakt.tv\"")
+            buildConfigField("String", "BASE_API_URL", "\"https://api-v2launch.trakt.tv\"")
+            buildConfigField("String", "TMDB_KEY", "\"${prop.getProperty("tmdb_key")}\"")
             buildConfigField("String", "TMDB_API_URL", "\"https://api.themoviedb.org/3\"")
 
             resValue("string", "oauth_referrer_scheme", "unbounds-trakt")
@@ -117,9 +117,9 @@ android {
 
             buildConfigField("String", "CLIENT_ID", "\"${prop.getProperty("staging_client_id")}\"")
             buildConfigField("String", "CLIENT_SECRET", "\"${prop.getProperty("staging_client_secret")}\"")
-            buildConfigField("String", "TMDB_KEY", "\"${prop.getProperty("tmdb_key")}\"")
-            buildConfigField("String", "BASE_API_URL", "\"http://api.staging.trakt.tv\"")
             buildConfigField("String", "BASE_URL", "\"http://staging.trakt.tv\"")
+            buildConfigField("String", "BASE_API_URL", "\"http://api.staging.trakt.tv\"")
+            buildConfigField("String", "TMDB_KEY", "\"${prop.getProperty("tmdb_key")}\"")
             buildConfigField("String", "TMDB_API_URL", "\"https://api.themoviedb.org/3\"")
 
             resValue("string", "oauth_referrer_scheme", "unbounds-trakt-debug")
