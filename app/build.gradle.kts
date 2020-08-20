@@ -1,4 +1,7 @@
 import java.io.FileInputStream
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 plugins {
@@ -10,6 +13,35 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
 }
 
+fun String.runCommand(workingDir: File = File(".")): String? {
+    try {
+        val parts = this.split("\\s".toRegex())
+        val proc = ProcessBuilder(*parts.toTypedArray())
+                .directory(workingDir)
+                .redirectOutput(ProcessBuilder.Redirect.PIPE)
+                .redirectError(ProcessBuilder.Redirect.PIPE)
+                .start()
+
+        proc.waitFor(30, TimeUnit.SECONDS)
+        return proc.inputStream.bufferedReader().readText().trim()
+    } catch (e: java.io.IOException) {
+        e.printStackTrace()
+        return null
+    }
+}
+
+val dynamicVersionCode = (System.currentTimeMillis() / 1000L).toInt()
+
+val gitSha = "git rev-parse --short HEAD".runCommand()
+
+val timestamp: String
+    get() {
+        val formatter = DateTimeFormatter.ofPattern("yyMMdd.HHmm").withZone(ZoneId.of("Europe/Stockholm"))
+        return formatter.format(Instant.now())
+    }
+
+val latestVersion = "git describe --tags --abbrev=0".runCommand()
+
 android {
     compileSdkVersion(29)
 
@@ -19,8 +51,8 @@ android {
         minSdkVersion(21)
         targetSdkVersion(29)
 
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = dynamicVersionCode
+        versionName = "$latestVersion-$timestamp-$gitSha"
     }
 
     compileOptions {
@@ -52,7 +84,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
-            
+
             buildConfigField("String", "CLIENT_ID", "\"${prop.getProperty("client_id")}\"")
             buildConfigField("String", "CLIENT_SECRET", "\"${prop.getProperty("client_secret")}\"")
             buildConfigField("String", "TMDB_KEY", "\"${prop.getProperty("tmdb_key")}\"")
