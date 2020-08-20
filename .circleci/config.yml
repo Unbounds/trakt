@@ -80,6 +80,9 @@ jobs:
             - ~/.android
             - ~/.gradle
       - run:
+          name: Change ownership of directories
+          command: chown -R $USER:$USER app/src/main
+      - run:
           name: Publish release
           command: ./gradlew publish -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_password=$KEY_PASSWORD --console=plain
       - run:

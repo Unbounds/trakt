@@ -49,9 +49,20 @@ fun updateReleaseNotes() {
         return
     }
 
-    with(File("app/src/main/play/release-notes/en-US/default.txt")) {
-        if (!parentFile.mkdirs()) return
-        if (!exists()) if (!createNewFile()) return
+    with(file("src/main/play/release-notes/en-US/default.txt")) {
+        with(parentFile) {
+            if (!exists()) try {
+                mkdirs()
+            } catch (e: kotlin.Exception) {
+                System.out.println(e.message)
+            }
+        }
+
+        if (!exists()) try {
+            createNewFile()
+        } catch (e: kotlin.Exception) {
+            System.out.println(e.message)
+        }
         printWriter().use { out ->
             out.println(notes)
         }
