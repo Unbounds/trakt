@@ -18,3 +18,7 @@ staging_client_id=value
 staging_client_secret=value
 tmbd_key=value
 ```
+
+## License
+
+[GNU GPLv3](LICENSE.txt)
