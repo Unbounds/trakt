@@ -191,4 +191,4 @@ tasks.register("updateReleaseNotes") {
     updateReleaseNotes()
 }
 
-tasks["publishBundle"].dependsOn("updateReleaseNotes")
+tasks["publish"].dependsOn("updateReleaseNotes")
