@@ -12,7 +12,7 @@ data class Episode(
 
 data class EpisodeIds(
         val trakt: Long,
-        val tvdb: Long,
+        val tvdb: Long?,
         val imdb: String?,
         val tmdb: Long?,
 )
