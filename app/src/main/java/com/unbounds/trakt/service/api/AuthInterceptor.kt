@@ -32,9 +32,8 @@ class AuthInterceptor @Inject constructor(
         val request = chain.request()
         val requestBuilder = request.newBuilder()
         val token = token
-        if (token != null) {
-            requestBuilder.addHeader("Authorization", "Bearer ${token.access_token}")
-        }
+        requestBuilder.addHeader("Authorization", "Bearer ${token?.access_token}")
+
         val response = chain.proceed(requestBuilder.build())
 
         if (!response.isSuccessful && response.code == 401) {
