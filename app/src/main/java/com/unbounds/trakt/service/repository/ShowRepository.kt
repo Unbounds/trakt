@@ -43,7 +43,7 @@ class ShowRepository @Inject constructor(
             progressMutables[showId] = progressMutable
 
             mediator.addSource(progressMutable) { progress ->
-                if (progress.next_episode != null && !progress.isCompleted) {
+                if (progress?.next_episode != null && !progress.isCompleted) {
                     val showProgress = ShowProgress(show.show, progress, progress.next_episode, show.last_watched_at
                             ?: "")
                     with(mediator.value ?: listOf()) {
