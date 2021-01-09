@@ -9,6 +9,7 @@ import com.unbounds.trakt.service.api.model.trakt.request.EpisodeIds
 import com.unbounds.trakt.service.api.model.trakt.request.WatchedItems
 import com.unbounds.trakt.service.api.model.trakt.response.Search
 import com.unbounds.trakt.service.api.model.trakt.response.WatchedProgress
+import com.unbounds.trakt.utils.ListState
 import com.unbounds.trakt.utils.replaceOrAdd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +25,8 @@ class SearchRepository @Inject constructor(
         private val tmdbApi: TmdbApi,
 ) {
 
-    private val refreshingMutable = MutableLiveData<Boolean>()
-    val refreshing: LiveData<Boolean> = refreshingMutable
+    private val refreshingMutable = MutableLiveData<ListState>()
+    val refreshing: LiveData<ListState> = refreshingMutable
 
     private val progressMutables = HashMap<Long, MutableLiveData<WatchedProgress>>()
     private val mediator = MediatorLiveData<List<ShowProgress<Double>>>()
@@ -35,7 +36,7 @@ class SearchRepository @Inject constructor(
         mediator.value = listOf()
         var loadingCounter = 0
 
-        if (list.isEmpty()) refreshingMutable.value = false
+        if (list.isEmpty()) refreshingMutable.value = ListState.EMPTY
         list.forEach { search ->
             loadingCounter++
             val showId = search.show.ids.trakt
@@ -43,7 +44,7 @@ class SearchRepository @Inject constructor(
             progressMutables[showId] = progressMutable
 
             mediator.addSource(progressMutable) { progress ->
-                if (progress.next_episode != null && !progress.isCompleted) {
+                if (progress?.next_episode != null && !progress.isCompleted) {
                     val showProgress = ShowProgress(search.show, progress, progress.next_episode, search.score)
                     with(mediator.value ?: listOf()) {
                         mediator.value = replaceOrAdd(showProgress) { loadedProgress -> loadedProgress.show.ids.trakt == showId }
@@ -69,7 +70,7 @@ class SearchRepository @Inject constructor(
 
                 loadingCounter--
                 if (loadingCounter <= 0) {
-                    refreshingMutable.value = false
+                    refreshingMutable.value = if (mediator.value.isNullOrEmpty()) ListState.EMPTY else ListState.LOADED
                 }
             }
         }
@@ -86,7 +87,7 @@ class SearchRepository @Inject constructor(
     }
 
     fun search(query: String) = CoroutineScope(Dispatchers.IO).launch {
-        refreshingMutable.postValue(true)
+        refreshingMutable.postValue(ListState.LOADING)
         searchMutable.postValue(api.search(query).await().body() ?: listOf())
     }
 

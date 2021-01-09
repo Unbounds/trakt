@@ -9,10 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.unbounds.trakt.R
+import com.unbounds.trakt.utils.ListState
 import com.unbounds.trakt.viewmodel.NextEpisode
 import com.unbounds.trakt.viewmodel.ProgressViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_progress.*
+import kotlinx.android.synthetic.main.fragment_search.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,8 +52,24 @@ class ProgressFragment : Fragment() {
         )
         progress_swipe_refresh_layout.setOnRefreshListener { viewModel.reload() }
 
-        viewModel.refreshing.observe(viewLifecycleOwner) { refreshing ->
-            progress_swipe_refresh_layout.isRefreshing = refreshing
+        viewModel.refreshing.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                ListState.LOADING -> {
+                    progress_swipe_refresh_layout.isRefreshing = true
+                    progress_recycle_view.visibility = View.VISIBLE
+                    progress_empty_view.visibility = View.GONE
+                }
+                ListState.LOADED -> {
+                    progress_swipe_refresh_layout.isRefreshing = false
+                    progress_recycle_view.visibility = View.VISIBLE
+                    progress_empty_view.visibility = View.GONE
+                }
+                ListState.EMPTY -> {
+                    progress_swipe_refresh_layout.isRefreshing = false
+                    progress_recycle_view.visibility = View.GONE
+                    progress_empty_view.visibility = View.VISIBLE
+                }
+            }
         }
 
         var firstItem: NextEpisode? = null

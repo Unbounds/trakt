@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.unbounds.trakt.service.repository.SearchRepository
+import com.unbounds.trakt.utils.ListState
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SearchViewModel @Inject constructor(private val repository: SearchRepository) : ViewModel() {
 
-    val refreshing: LiveData<Boolean> = repository.refreshing
+    val refreshing: LiveData<ListState> = repository.refreshing
 
     val items: LiveData<List<NextEpisode>> = repository.shows.map { list ->
         list.map { item ->

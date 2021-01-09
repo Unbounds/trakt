@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.unbounds.trakt.R
+import com.unbounds.trakt.utils.ListState
 import com.unbounds.trakt.viewmodel.NextEpisode
 import com.unbounds.trakt.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,8 +53,24 @@ class SearchFragment : Fragment() {
                 R.color.cool_gray
         )
 
-        viewModel.refreshing.observe(viewLifecycleOwner) { refreshing ->
-            search_swipe_refresh_layout.isRefreshing = refreshing
+        viewModel.refreshing.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                ListState.LOADING -> {
+                    search_swipe_refresh_layout.isRefreshing = true
+                    search_recycle_view.visibility = View.VISIBLE
+                    search_empty_view.visibility = View.GONE
+                }
+                ListState.LOADED -> {
+                    search_swipe_refresh_layout.isRefreshing = false
+                    search_recycle_view.visibility = View.VISIBLE
+                    search_empty_view.visibility = View.GONE
+                }
+                ListState.EMPTY -> {
+                    search_swipe_refresh_layout.isRefreshing = false
+                    search_recycle_view.visibility = View.GONE
+                    search_empty_view.visibility = View.VISIBLE
+                }
+            }
         }
 
         var firstItem: NextEpisode? = null

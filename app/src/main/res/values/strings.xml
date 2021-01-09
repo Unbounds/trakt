@@ -2,4 +2,6 @@
     <string name="app_name">Trakt</string>
     <string name="search">Search</string>
     <string name="search_hint">Show name</string>
+    <string name="search_empty">No shows found.</string>
+    <string name="progress_empty">No shows found. Try searching for one.</string>
 </resources>

@@ -9,6 +9,7 @@ import com.unbounds.trakt.service.api.model.trakt.request.EpisodeIds
 import com.unbounds.trakt.service.api.model.trakt.request.WatchedItems
 import com.unbounds.trakt.service.api.model.trakt.response.WatchedProgress
 import com.unbounds.trakt.service.api.model.trakt.response.WatchedShow
+import com.unbounds.trakt.utils.ListState
 import com.unbounds.trakt.utils.replaceOrAdd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +25,8 @@ class ShowRepository @Inject constructor(
         private val tmdbApi: TmdbApi,
 ) {
 
-    private val refreshingMutable = MutableLiveData<Boolean>()
-    val refreshing: LiveData<Boolean> = refreshingMutable
+    private val refreshingMutable = MutableLiveData<ListState>()
+    val refreshing: LiveData<ListState> = refreshingMutable
 
     private val progressMutables = HashMap<Long, MutableLiveData<WatchedProgress>>()
     private val mediator = MediatorLiveData<List<ShowProgress<String>>>()
@@ -35,7 +36,7 @@ class ShowRepository @Inject constructor(
         mediator.value = listOf()
         var loadingCounter = 0
 
-        if (list.isEmpty()) refreshingMutable.value = false
+        if (list.isEmpty()) refreshingMutable.value = ListState.EMPTY
         list.forEach { show ->
             loadingCounter++
             val showId = show.show.ids.trakt
@@ -70,7 +71,7 @@ class ShowRepository @Inject constructor(
 
                 loadingCounter--
                 if (loadingCounter <= 0) {
-                    refreshingMutable.value = false
+                    refreshingMutable.value = if (mediator.value.isNullOrEmpty()) ListState.EMPTY else ListState.LOADED
                 }
             }
         }
@@ -87,7 +88,7 @@ class ShowRepository @Inject constructor(
     }
 
     fun reload() = CoroutineScope(Dispatchers.IO).launch {
-        refreshingMutable.postValue(true)
+        refreshingMutable.postValue(ListState.LOADED)
         watchedShowsMutable.postValue(api.getWatchedShows().await().body() ?: listOf())
     }
 

@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.unbounds.trakt.service.repository.ShowRepository
+import com.unbounds.trakt.utils.ListState
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ProgressViewModel @Inject constructor(private val repository: ShowRepository) : ViewModel() {
 
-    val refreshing: LiveData<Boolean> = repository.refreshing
+    val refreshing: LiveData<ListState> = repository.refreshing
 
     val items: LiveData<List<NextEpisode>> = repository.watchedShows.map { list ->
         list.map { item ->
