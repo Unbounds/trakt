@@ -191,4 +191,3 @@ tasks.register("updateReleaseNotes") {
     updateReleaseNotes()
 }
 
-tasks["publish"].dependsOn("updateReleaseNotes")
