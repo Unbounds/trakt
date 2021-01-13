@@ -88,7 +88,7 @@ class ShowRepository @Inject constructor(
     }
 
     fun reload() = CoroutineScope(Dispatchers.IO).launch {
-        refreshingMutable.postValue(ListState.LOADED)
+        refreshingMutable.postValue(ListState.LOADING)
         watchedShowsMutable.postValue(api.getWatchedShows().await().body() ?: listOf())
     }
 
