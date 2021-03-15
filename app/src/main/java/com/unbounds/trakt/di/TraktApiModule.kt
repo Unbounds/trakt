@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -24,8 +25,14 @@ class TraktApiModule {
 
     @Singleton
     @Provides
+    fun providesDispatcher() = Dispatcher().apply {
+        maxRequestsPerHost = 20
+    }
+
+    @Singleton
+    @Provides
     @Named("Trakt")
-    fun providesOkHttpClient(authInterceptor: AuthInterceptor) = OkHttpClient().newBuilder()
+    fun providesOkHttpClient(authInterceptor: AuthInterceptor, dispatcher: Dispatcher) = OkHttpClient().newBuilder()
             .addInterceptor { chain ->
                 val newRequest = chain.request()
                         .newBuilder()
@@ -35,8 +42,10 @@ class TraktApiModule {
 
                 chain.proceed(newRequest)
             }
+            .dispatcher(dispatcher)
             .addInterceptor(authInterceptor)
             .build()
+
 
     @Singleton
     @Provides
