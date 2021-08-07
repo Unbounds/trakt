@@ -36,7 +36,6 @@ class SearchRepository @Inject constructor(
         mediator.value = listOf()
         var loadingCounter = 0
 
-        if (list.isEmpty()) refreshingMutable.value = ListState.EMPTY
         list.forEach { search ->
             loadingCounter++
             val showId = search.show.ids.trakt
@@ -82,13 +81,28 @@ class SearchRepository @Inject constructor(
 
     private fun getProgress(showId: Long) = MutableLiveData<WatchedProgress>().apply {
         CoroutineScope(Dispatchers.IO).launch {
-            postValue(api.getWatchedProgress(showId).await().body())
+            val response = api.getWatchedProgress(showId).await()
+            if (response.isSuccessful) {
+                postValue(response.body())
+            } else {
+                searchMutable.postValue(listOf())
+                refreshingMutable.postValue(ListState.ERROR)
+            }
         }
     }
 
     fun search(query: String) = CoroutineScope(Dispatchers.IO).launch {
         refreshingMutable.postValue(ListState.LOADING)
-        searchMutable.postValue(api.search(query).await().body() ?: listOf())
+
+        val response = api.search(query).await()
+        if (response.isSuccessful) {
+            val list = response.body()
+            if (list.isNullOrEmpty()) refreshingMutable.postValue(ListState.EMPTY)
+            searchMutable.postValue(list ?: listOf())
+        } else {
+            searchMutable.postValue(listOf())
+            refreshingMutable.postValue(ListState.ERROR)
+        }
     }
 
     fun episodeWatched(showId: Long, episodeId: Long) = CoroutineScope(Dispatchers.IO).launch {

@@ -31,7 +31,11 @@ class SearchFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -61,10 +65,10 @@ class SearchFragment : Fragment() {
         }
 
         binding.searchSwipeRefreshLayout.setColorSchemeResources(
-                R.color.moonlight_blue,
-                R.color.boogie_green,
-                R.color.space_gray,
-                R.color.cool_gray
+            R.color.moonlight_blue,
+            R.color.boogie_green,
+            R.color.space_gray,
+            R.color.cool_gray
         )
 
         viewModel.refreshing.observe(viewLifecycleOwner) { state ->
@@ -82,6 +86,13 @@ class SearchFragment : Fragment() {
                 ListState.EMPTY -> {
                     binding.searchSwipeRefreshLayout.isRefreshing = false
                     binding.searchRecycleView.visibility = View.GONE
+                    binding.searchEmptyView.text = getString(R.string.search_empty)
+                    binding.searchEmptyView.visibility = View.VISIBLE
+                }
+                ListState.ERROR -> {
+                    binding.searchSwipeRefreshLayout.isRefreshing = false
+                    binding.searchRecycleView.visibility = View.GONE
+                    binding.searchEmptyView.text = getString(R.string.trakt_error)
                     binding.searchEmptyView.visibility = View.VISIBLE
                 }
             }
@@ -94,7 +105,10 @@ class SearchFragment : Fragment() {
                 firstItem = episodes.firstOrNull()
                 with(binding.searchRecycleView) {
                     if (!hasNestedScrollingParent(ViewCompat.TYPE_NON_TOUCH)) {
-                        startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_NON_TOUCH);
+                        startNestedScroll(
+                            ViewCompat.SCROLL_AXIS_VERTICAL,
+                            ViewCompat.TYPE_NON_TOUCH
+                        );
                     }
                     smoothScrollToPosition(0)
                 }

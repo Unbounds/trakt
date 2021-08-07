@@ -21,8 +21,8 @@ import kotlin.collections.set
 
 @Singleton
 class ShowRepository @Inject constructor(
-        private val api: TraktApi,
-        private val tmdbApi: TmdbApi,
+    private val api: TraktApi,
+    private val tmdbApi: TmdbApi,
 ) {
 
     private val refreshingMutable = MutableLiveData<ListState>()
@@ -36,7 +36,6 @@ class ShowRepository @Inject constructor(
         mediator.value = listOf()
         var loadingCounter = 0
 
-        if (list.isEmpty()) refreshingMutable.value = ListState.EMPTY
         list.forEach { show ->
             loadingCounter++
             val showId = show.show.ids.trakt
@@ -45,37 +44,45 @@ class ShowRepository @Inject constructor(
 
             mediator.addSource(progressMutable) { progress ->
                 if (progress?.next_episode != null && !progress.isCompleted) {
-                    val showProgress = ShowProgress(show.show, progress, progress.next_episode, show.last_watched_at
-                            ?: "")
+                    val showProgress = ShowProgress(
+                        show.show, progress, progress.next_episode, show.last_watched_at
+                            ?: ""
+                    )
                     with(mediator.value ?: listOf()) {
-                        mediator.value = replaceOrAdd(showProgress) { loadedProgress -> loadedProgress.show.ids.trakt == showId }
+                        mediator.value =
+                            replaceOrAdd(showProgress) { loadedProgress -> loadedProgress.show.ids.trakt == showId }
                     }
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val tmdbShowId = show.show.ids.tmdb ?: return@launch
 
-                        val images = tmdbApi.getImages(tmdbShowId.toInt(), progress.next_episode.season.toInt()).await().body()?.posters
+                        val images = tmdbApi.getImages(
+                            tmdbShowId.toInt(),
+                            progress.next_episode.season.toInt()
+                        ).await().body()?.posters
                         if (images.isNullOrEmpty()) return@launch
 
                         withContext(Dispatchers.Main) {
                             with(mediator.value ?: listOf()) {
-                                mediator.value = replaceOrAdd(showProgress.copy(imageUrl = "$IMAGE_PREFIX${images.first().file_path}")) { loadedProgress -> loadedProgress.show.ids.trakt == showId }
+                                mediator.value =
+                                    replaceOrAdd(showProgress.copy(imageUrl = "$IMAGE_PREFIX${images.first().file_path}")) { loadedProgress -> loadedProgress.show.ids.trakt == showId }
                             }
                         }
                     }
                 } else {
                     with(mediator.value ?: listOf()) {
-                        mediator.value = filterNot { loadedProgress -> loadedProgress.show.ids.trakt == showId }
+                        mediator.value =
+                            filterNot { loadedProgress -> loadedProgress.show.ids.trakt == showId }
                     }
                 }
 
                 loadingCounter--
-                if (loadingCounter <= 0) {
-                    refreshingMutable.value = if (mediator.value.isNullOrEmpty()) ListState.EMPTY else ListState.LOADED
+                if (loadingCounter <= 0 && progressMutable.hasActiveObservers()) {
+                    refreshingMutable.value =
+                        if (mediator.value.isNullOrEmpty()) ListState.EMPTY else ListState.LOADED
                 }
             }
         }
-
         mediator
     }.map { list ->
         list.sortedByDescending { item -> item.sort }
@@ -83,13 +90,28 @@ class ShowRepository @Inject constructor(
 
     private fun getProgress(showId: Long) = MutableLiveData<WatchedProgress>().apply {
         CoroutineScope(Dispatchers.IO).launch {
-            postValue(api.getWatchedProgress(showId).await().body())
+            val response = api.getWatchedProgress(showId).await()
+            if (response.isSuccessful) {
+                postValue(response.body())
+            } else {
+                watchedShowsMutable.postValue(listOf())
+                refreshingMutable.postValue(ListState.ERROR)
+            }
         }
     }
 
     fun reload() = CoroutineScope(Dispatchers.IO).launch {
         refreshingMutable.postValue(ListState.LOADING)
-        watchedShowsMutable.postValue(api.getWatchedShows().await().body() ?: listOf())
+
+        val response = api.getWatchedShows().await()
+        if (response.isSuccessful) {
+            val list = response.body()
+            if (list.isNullOrEmpty()) refreshingMutable.postValue(ListState.EMPTY)
+            watchedShowsMutable.postValue(list ?: listOf())
+        } else {
+            watchedShowsMutable.postValue(listOf())
+            refreshingMutable.postValue(ListState.ERROR)
+        }
     }
 
     fun episodeWatched(showId: Long, episodeId: Long) = CoroutineScope(Dispatchers.IO).launch {
@@ -100,7 +122,8 @@ class ShowRepository @Inject constructor(
                 }
             }
         }
-        api.postWatchedItems(WatchedItems(episodes = listOf(Episode(ids = EpisodeIds(trakt = episodeId))))).await()
+        api.postWatchedItems(WatchedItems(episodes = listOf(Episode(ids = EpisodeIds(trakt = episodeId)))))
+            .await()
         progressMutables[showId]?.postValue(api.getWatchedProgress(showId).await().body())
     }
 }

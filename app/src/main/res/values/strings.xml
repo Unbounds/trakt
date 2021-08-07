@@ -4,4 +4,5 @@
     <string name="search_hint">Show name</string>
     <string name="search_empty">No shows found.</string>
     <string name="progress_empty">No shows found. Try searching for one.</string>
+    <string name="trakt_error">Error on trakt server.</string>
 </resources>

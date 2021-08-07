@@ -80,6 +80,13 @@ class ProgressFragment : Fragment() {
                 ListState.EMPTY -> {
                     binding.progressSwipeRefreshLayout.isRefreshing = false
                     binding.progressRecycleView.visibility = View.GONE
+                    binding.progressEmptyView.text = getString(R.string.progress_empty)
+                    binding.progressEmptyView.visibility = View.VISIBLE
+                }
+                ListState.ERROR -> {
+                    binding.progressSwipeRefreshLayout.isRefreshing = false
+                    binding.progressRecycleView.visibility = View.GONE
+                    binding.progressEmptyView.text = getString(R.string.trakt_error)
                     binding.progressEmptyView.visibility = View.VISIBLE
                 }
             }
