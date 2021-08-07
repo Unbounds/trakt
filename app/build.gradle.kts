@@ -164,10 +164,9 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("com.squareup.picasso:picasso:2.71828")
 
-    val retrofit2Version = "2.9.0"
     // Retrofit2
-    implementation("com.squareup.retrofit2:retrofit:$retrofit2Version")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofit2Version")
+    implementation("com.squareup.retrofit2:retrofit:${Version.retrofit2}")
+    implementation("com.squareup.retrofit2:converter-moshi:${Version.retrofit2}")
     implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
 
     // Okhttp3
@@ -175,14 +174,12 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.8.1")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.28.3-alpha")
-    kapt("com.google.dagger:hilt-android-compiler:2.28.3-alpha")
-
-    val navVersion = "2.3.0"
+    implementation("com.google.dagger:hilt-android:${Version.hilt}")
+    kapt("com.google.dagger:hilt-android-compiler:${Version.hilt}")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-fragment-ktx:${Version.nav}")
+    implementation("androidx.navigation:navigation-ui-ktx:${Version.nav}")
 
     testImplementation("junit:junit:4.13")
 }
