@@ -7,7 +7,6 @@ import java.util.*
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
     id("com.github.triplet.play") version "3.6.0"
@@ -70,13 +69,15 @@ fun updateReleaseNotes() {
 }
 
 android {
-    compileSdk = 29
+    compileSdk = 30
+
+    buildFeatures.viewBinding = true
 
     defaultConfig {
         applicationId = "com.unbounds.trakt"
 
         minSdk = 21
-        targetSdk = 29
+        targetSdk = 30
 
         versionCode = dynamicVersionCode
         versionName = "$latestVersion-$timestamp-$gitSha"

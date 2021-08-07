@@ -11,10 +11,10 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.findNavController
 import com.unbounds.trakt.NavigationDirections
 import com.unbounds.trakt.R
+import com.unbounds.trakt.databinding.ActivityMainBinding
 import com.unbounds.trakt.utils.Event
 import com.unbounds.trakt.utils.consume
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -25,11 +25,14 @@ class MainActivity : AppCompatActivity() {
     @Named("auth")
     lateinit var authError: LiveData<Event<Unit>>
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         authError.observe(this) { event ->
             event.consume {
@@ -63,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                             imm?.hideSoftInputFromWindow(window.windowToken, 0)
                         }
-                        main_root.requestFocus()
+                        binding.root.requestFocus()
                         return true
                     }
 

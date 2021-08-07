@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import com.unbounds.trakt.R
+import com.unbounds.trakt.databinding.ProgressItemBinding
 import com.unbounds.trakt.viewmodel.NextEpisode
-import kotlinx.android.synthetic.main.progress_item.view.*
 
 /**
  * Created by maclir on 2015-11-17.
@@ -23,19 +22,19 @@ class Adapter(private val listener: OnClicked) : ListAdapter<NextEpisode, Adapte
         fun onCheckClicked(episode: NextEpisode)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(parent.inflate(R.layout.progress_item))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(ProgressItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getItem(position))
 
-    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(private val itemBinding: ProgressItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
 
         private var nextEpisode: NextEpisode? = null
 
         init {
-            view.progress_item_check.setOnClickListener(View.OnClickListener {
+            itemBinding.progressItemCheck.setOnClickListener(View.OnClickListener {
                 val episode = nextEpisode
-                if (view.progress_item_check.isSelected || episode == null) return@OnClickListener
-                view.progress_item_check.isSelected = true
+                if (itemBinding.progressItemCheck.isSelected || episode == null) return@OnClickListener
+                itemBinding.progressItemCheck.isSelected = true
 
                 listener.onCheckClicked(episode)
             })
@@ -45,17 +44,13 @@ class Adapter(private val listener: OnClicked) : ListAdapter<NextEpisode, Adapte
             this.nextEpisode = episode
 
             with(episode) {
-                Picasso.get().load(imageUrl).fit().centerCrop().into(view.progress_item_show_poster)
-                view.progress_item_show_title.text = showTitle
-                view.progress_item_episode_title.text = episodeTitle
-                view.progress_item_progress_text.text = progressText
-                view.progress_item_progress_bar.progress = progress
-                view.progress_item_check.isSelected = selected
+                Picasso.get().load(imageUrl).fit().centerCrop().into(itemBinding.progressItemShowPoster)
+                itemBinding.progressItemShowTitle.text = showTitle
+                itemBinding.progressItemEpisodeTitle.text = episodeTitle
+                itemBinding.progressItemProgressText.text = progressText
+                itemBinding.progressItemProgressBar.progress = progress
+                itemBinding.progressItemCheck.isSelected = selected
             }
         }
     }
-}
-
-fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
-    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 }
