@@ -84,7 +84,7 @@ jobs:
           command: chown -R $USER:$USER app/src/main
       - run:
           name: Publish release
-          command: ./gradlew updateReleaseNotes publish -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_password=$KEY_PASSWORD --console=plain
+          command: ./gradlew updateReleaseNotes publishBundle -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_password=$KEY_PASSWORD --console=plain --no-daemon
       - run:
           name: Move apk
           command: cp -r app/build/outputs $CIRCLE_ARTIFACTS
