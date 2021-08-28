@@ -176,6 +176,10 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 tasks.register("updateReleaseNotes") {
     updateReleaseNotes()
 }
