@@ -120,8 +120,8 @@ android {
 
             buildConfigField("String", "CLIENT_ID", "\"${prop.getProperty("staging_client_id")}\"")
             buildConfigField("String", "CLIENT_SECRET", "\"${prop.getProperty("staging_client_secret")}\"")
-            buildConfigField("String", "BASE_URL", "\"http://staging.trakt.tv\"")
-            buildConfigField("String", "BASE_API_URL", "\"http://api-staging.trakt.tv\"")
+            buildConfigField("String", "BASE_URL", "\"https://staging.trakt.tv\"")
+            buildConfigField("String", "BASE_API_URL", "\"https://api-staging.trakt.tv\"")
             buildConfigField("String", "TMDB_KEY", "\"${prop.getProperty("tmdb_key")}\"")
             buildConfigField("String", "TMDB_API_URL", "\"https://api.themoviedb.org/3\"")
 
