@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
@@ -92,18 +91,8 @@ class ProgressFragment : Fragment() {
             }
         }
 
-        var firstItem: NextEpisode? = null
         viewModel.items.observe(viewLifecycleOwner) { episodes ->
-            adapter.submitList(episodes) {
-                if (firstItem == episodes.firstOrNull()) return@submitList
-                firstItem = episodes.firstOrNull()
-                with(binding.progressRecycleView) {
-                    if (!hasNestedScrollingParent(ViewCompat.TYPE_NON_TOUCH)) {
-                        startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_NON_TOUCH);
-                    }
-                    smoothScrollToPosition(0)
-                }
-            }
+            adapter.submitList(episodes)
         }
 
         viewModel.reload()
