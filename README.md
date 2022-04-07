@@ -2,7 +2,7 @@
 
 # trakt (UNOFFICIAL)
 Trakt android application. Not official, nor developed or supported by trakt.tv.
-This project/app uses their [public API](https://trakt.docs.apiary.io/)
+This project/app uses their [public API](https://trakt.docs.apiary.io/).
 
 ## How to make debug a build:
 
