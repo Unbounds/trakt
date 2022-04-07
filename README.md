@@ -1,7 +1,8 @@
 [![CircleCI](https://circleci.com/gh/Unbounds/trakt.svg?style=shield)](https://circleci.com/gh/Unbounds/trakt)
 
-# trakt
-Trakt android application
+# trakt (UNOFFICIAL)
+Trakt android application. Not official, nor developed or supported by trakt.tv.
+This project/app uses their [public API](https://trakt.docs.apiary.io/)
 
 ## How to make debug a build:
 
